@@ -1,12 +1,13 @@
 # environments/dev/terraform.tfvars
 
-billing_account_id = "000000-000000-000000" # Update with your GCP Billing Account ID
-project_id         = "mortru-dev"
-project_prefix     = "mortru"
-region             = "us-central1"
-dr_region          = "us-east1"
-environment        = "dev"
-shared_project_id  = "mortru-shared"
+billing_account_id        = "000000-000000-000000" # Update with your GCP Billing Account ID
+project_id                = "mortru-dev"
+project_prefix            = "mortru"
+region                    = "us-central1"
+dr_region                 = "us-east1"
+environment               = "dev"
+shared_project_id         = "mortru-shared"
+terraform_service_account = "sa-terraform-admin@mortru-shared.iam.gserviceaccount.com"
 
 # Cost ceiling
 monthly_budget_usd = 5
