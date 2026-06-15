@@ -1,6 +1,14 @@
-variable "billing_account_id" { type = string }
-variable "project_id" { type = string }
-variable "environment" { type = string }
+variable "billing_account_id" {
+  type = string
+}
+
+variable "project_id" {
+  type = string
+}
+
+variable "environment" {
+  type = string
+}
 
 variable "monthly_budget_usd" {
   description = "Monthly budget in USD. Change this single value to update spending limits."

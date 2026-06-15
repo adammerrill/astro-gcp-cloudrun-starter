@@ -4,12 +4,12 @@
 resource "google_project" "this" {
   count = var.create_project ? 1 : 0
 
-  name                = var.project_name
-  project_id          = var.project_id
-  billing_account     = var.billing_account_id
-  org_id              = var.org_id != "" ? var.org_id : null
-  folder_id           = var.folder_id != "" ? var.folder_id : null
-  deletion_policy     = var.deletion_policy
+  name            = var.project_name
+  project_id      = var.project_id
+  billing_account = var.billing_account_id
+  org_id          = var.org_id != "" ? var.org_id : null
+  folder_id       = var.folder_id != "" ? var.folder_id : null
+  deletion_policy = var.deletion_policy
 }
 
 locals {

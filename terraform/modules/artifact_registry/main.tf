@@ -23,7 +23,7 @@ resource "google_artifact_registry_repository" "docker" {
     action = "DELETE"
 
     condition {
-      tag_state = "UNTAGGED"
+      tag_state  = "UNTAGGED"
       older_than = "${var.untagged_retention_days * 24 * 60 * 60}s"
     }
   }

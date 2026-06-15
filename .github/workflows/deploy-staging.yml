@@ -1,0 +1,57 @@
+name: Deploy Staging
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.SA_DEPLOY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Authenticate Docker
+        run: gcloud auth configure-docker ${{ vars.AR_REGION }}-docker.pkg.dev --quiet
+
+      - name: Build and Push Docker Image
+        run: |
+          IMAGE_TAG="${{ vars.AR_REGION }}-docker.pkg.dev/${{ vars.SHARED_PROJECT }}/${{ vars.AR_REPO }}/website:${{ github.ref_name }}"
+          docker build -t "$IMAGE_TAG" .
+          docker push "$IMAGE_TAG"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Apply
+        run: |
+          cd terraform/environments/staging
+          terraform init
+          terraform apply -auto-approve -var="image=${{ vars.AR_REGION }}-docker.pkg.dev/${{ vars.SHARED_PROJECT }}/${{ vars.AR_REPO }}/website:${{ github.ref_name }}"
+
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ vars.SERVICE_NAME }}
+          image: ${{ vars.AR_REGION }}-docker.pkg.dev/${{ vars.SHARED_PROJECT }}/${{ vars.AR_REPO }}/website:${{ github.ref_name }}
+          region: ${{ vars.REGION }}
+          project_id: ${{ vars.PROJECT_ID }}
+
+      - name: Smoke Test
+        run: |
+          URL=$(gcloud run services describe ${{ vars.SERVICE_NAME }} --region=${{ vars.REGION }} --project=${{ vars.PROJECT_ID }} --format='value(status.url)')
+          echo "Testing URL: $URL"
+          curl -f "$URL" || exit 1

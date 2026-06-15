@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build test image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: website:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  terraform-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Validate Shared Env
+        run: |
+          cd terraform/environments/shared
+          terraform init -backend=false
+          terraform validate
+
+      - name: Validate Dev Env
+        run: |
+          cd terraform/environments/dev
+          terraform init -backend=false
+          terraform validate
+
+      - name: Validate Staging Env
+        run: |
+          cd terraform/environments/staging
+          terraform init -backend=false
+          terraform validate
+
+      - name: Validate Production Env
+        run: |
+          cd terraform/environments/production
+          terraform init -backend=false
+          terraform validate

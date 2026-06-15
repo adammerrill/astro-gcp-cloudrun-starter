@@ -23,16 +23,16 @@ resource "google_compute_backend_service" "website" {
   project = var.project_id
 
   protocol              = "HTTP"
-  load_balancing_scheme  = "EXTERNAL_MANAGED"
-  enable_cdn             = true
+  load_balancing_scheme = "EXTERNAL_MANAGED"
+  enable_cdn            = true
 
   cdn_policy {
     cache_mode                   = "CACHE_ALL_STATIC"
     default_ttl                  = 3600
     max_ttl                      = 86400
-    signed_url_cache_max_age     = 0
     serve_while_stale            = 86400
     negative_caching             = true
+    signed_url_cache_max_age_sec = 0
   }
 
   backend {
