@@ -45,6 +45,7 @@ module "iam" {
   environment  = "shared"
   create_wif   = true
   github_owner = var.github_owner
+  github_repo  = var.github_repo
 
   depends_on = [module.project]
 }

@@ -80,3 +80,9 @@ variable "github_owner" {
   description = "GitHub username or organization name"
   default     = "adammerrill"
 }
+
+variable "github_repo" {
+  type        = string
+  description = "Full GitHub repository slug (owner/repo) for WIF repo-scoped attribute condition"
+  default     = "adammerrill/astro-gcp-cloudrun-starter"
+}

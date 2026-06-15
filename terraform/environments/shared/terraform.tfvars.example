@@ -16,5 +16,8 @@ dr_region = "us-east1"
 # GitHub username or organization name for WIF condition
 github_owner = "YOUR_GITHUB_OWNER"
 
+# Full repo slug (owner/repo) — WIF will ONLY accept tokens from this exact repository
+github_repo = "YOUR_GITHUB_OWNER/YOUR_REPO_NAME"
+
 # Service account to impersonate (created by the bootstrap module)
 terraform_service_account = "sa-terraform-admin@YOUR_PROJECT_PREFIX-shared.iam.gserviceaccount.com"

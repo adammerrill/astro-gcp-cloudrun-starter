@@ -26,6 +26,12 @@ variable "github_owner" {
   default     = "adammerrill"
 }
 
+variable "github_repo" {
+  description = "Full GitHub repository slug (owner/repo) for WIF repo-scoped attribute condition"
+  type        = string
+  default     = "adammerrill/astro-gcp-cloudrun-starter"
+}
+
 variable "enable_cloud_sql" {
   description = "Create Cloud SQL service account"
   type        = bool
