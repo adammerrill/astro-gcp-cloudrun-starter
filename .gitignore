@@ -28,3 +28,7 @@ pnpm-lock.yaml
 *.tfstate
 *.tfstate.backup
 .terraform.lock.hcl
+# Terraform Environment Overrides
+terraform/**/*.tfvars
+terraform/**/backend.tf
+!terraform/**/*.example

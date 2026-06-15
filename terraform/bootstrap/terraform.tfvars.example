@@ -1,0 +1,20 @@
+# terraform/bootstrap/terraform.tfvars.example
+# Copy this file to "terraform.tfvars" and fill in your values.
+
+# Naming prefix for your projects and GCS state bucket (e.g. "mycompany")
+project_prefix = "YOUR_PROJECT_PREFIX"
+
+# GCP Billing Account ID (format: XXXXXX-XXXXXX-XXXXXX)
+billing_account_id = "YOUR_BILLING_ACCOUNT_ID"
+
+# The email address of the developer running the bootstrap locally (used for SA impersonation grant)
+developer_email = "developer@example.com"
+
+# The default GCP region for your resource placements
+region = "us-central1"
+
+# Optional: GCP Organization ID (leave blank if creating standalone projects)
+org_id = ""
+
+# Optional: GCP Folder ID (leave blank if creating projects at the org root or standalone)
+folder_id = ""

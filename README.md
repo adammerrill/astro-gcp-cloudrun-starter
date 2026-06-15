@@ -1,11 +1,17 @@
-# 🚀 AstroWind
+# 🚀 astro-gcp-cloudrun-starter + GCP Cloud Run Starter Template
 
 <img src="https://raw.githubusercontent.com/arthelokyo/.github/main/resources/astrowind/lighthouse-score.png" align="right"
-     alt="AstroWind Lighthouse Score" width="100" height="358">
+     alt="astro-gcp-cloudrun-starter Lighthouse Score" width="100" height="358">
 
 🌟 _Most *starred* & *forked* Astro theme in 2022, 2023, 2024 & 2025_. 🌟
 
-**AstroWind** is a free and open-source template to make your website using **[Astro v6](https://astro.build/) + [Tailwind CSS v4](https://tailwindcss.com/)**. Ready to start a new project and designed taking into account web best practices.
+**astro-gcp-cloudrun-starter + GCP Cloud Run Starter Template** is a production-ready repository that serves as a reusable GCP Cloud Run web-app starter template. It allows any developer to branch or use this repository as a GitHub Template to stand up any type of containerized web application on Google Cloud Run with a secure, zero-secrets-in-git foundation.
+
+For setting up and deploying the infrastructure, see our guides:
+
+- [Template Quickstart](./docs/TEMPLATE_SETUP.md) — How to use this repository as a starter template.
+- [Setup Playbook](./docs/SETUP_PLAYBOOK.md) — Step-by-step instructions for initial manual bootstrap and Terraform backend migration.
+- [IaC Governance Rules](./docs/IAC_RULES.md) — The 9 developer rules for managing infrastructure changes.
 
 - ✅ **Production-ready** scores in **PageSpeed Insights** reports.
 - ✅ Integration with **Tailwind CSS v4** supporting **Dark mode** and **_RTL_**.
@@ -17,15 +23,15 @@
 
 <br>
 
-![AstroWind Theme Screenshot](https://raw.githubusercontent.com/arthelokyo/.github/main/resources/astrowind/screenshot-astrowind-readme-fina-v1.png)
+![astro-gcp-cloudrun-starter Theme Screenshot](https://raw.githubusercontent.com/arthelokyo/.github/main/resources/astrowind/screenshot-astrowind-readme-fina-v1.png)
 
 [![arthelokyo](https://custom-icon-badges.demolab.com/badge/made%20by%20-arthelokyo-556bf2?style=flat-square&logo=arthelokyo&logoColor=white&labelColor=101827)](https://github.com/arthelokyo)
-[![License](https://img.shields.io/github/license/arthelokyo/astrowind?style=flat-square&color=dddddd&labelColor=000000)](https://github.com/arthelokyo/astrowind/blob/main/LICENSE.md)
+[![License](https://img.shields.io/github/license/adammerrill/astro-gcp-cloudrun-starter?style=flat-square&color=dddddd&labelColor=000000)](https://github.com/adammerrill/astro-gcp-cloudrun-starter/blob/main/LICENSE.md)
 [![Maintained](https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square)](https://github.com/arthelokyo)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/arthelokyo/astrowind#contributing)
-[![Known Vulnerabilities](https://snyk.io/test/github/arthelokyo/astrowind/badge.svg?style=flat-square)](https://snyk.io/test/github/arthelokyo/astrowind)
-[![Stars](https://img.shields.io/github/stars/arthelokyo/astrowind.svg?style=social&label=stars&maxAge=86400&color=ff69b4)](https://github.com/arthelokyo/astrowind)
-[![Forks](https://img.shields.io/github/forks/arthelokyo/astrowind.svg?style=social&label=forks&maxAge=86400&color=ff69b4)](https://github.com/arthelokyo/astrowind)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/adammerrill/astro-gcp-cloudrun-starter#contributing)
+[![Known Vulnerabilities](https://snyk.io/test/github/adammerrill/astro-gcp-cloudrun-starter/badge.svg?style=flat-square)](https://snyk.io/test/github/adammerrill/astro-gcp-cloudrun-starter)
+[![Stars](https://img.shields.io/github/stars/adammerrill/astro-gcp-cloudrun-starter.svg?style=social&label=stars&maxAge=86400&color=ff69b4)](https://github.com/adammerrill/astro-gcp-cloudrun-starter)
+[![Forks](https://img.shields.io/github/forks/adammerrill/astro-gcp-cloudrun-starter.svg?style=social&label=forks&maxAge=86400&color=ff69b4)](https://github.com/adammerrill/astro-gcp-cloudrun-starter)
 
 <br>
 
@@ -33,7 +39,7 @@
 <summary>Table of Contents</summary>
 
 - [Demo](#demo)
-- [Upcoming: AstroWind 2.0 – We Need Your Vision!](#-upcoming-astrowind-20--we-need-your-vision)
+- [Upcoming: astro-gcp-cloudrun-starter 2.0 – We Need Your Vision!](#-upcoming-astrowind-20--we-need-your-vision)
 - [TL;DR](#tldr)
 - [Getting started](#getting-started)
   - [Project structure](#project-structure)
@@ -51,27 +57,27 @@
 
 ## Demo
 
-📌 [https://astrowind.vercel.app/](https://astrowind.vercel.app/)
+📌 [https://github.com/adammerrill/astro-gcp-cloudrun-starter/](https://github.com/adammerrill/astro-gcp-cloudrun-starter/)
 
 <br>
 
-## 🔔 Upcoming: AstroWind 2.0 – We Need Your Vision!
+## 🔔 Upcoming: astro-gcp-cloudrun-starter 2.0 – We Need Your Vision!
 
-We're gearing up for **AstroWind 2.0**, and we want it to be shaped by you, our community. Join the discussion and share your ideas, suggestions, and feedback to help us make AstroWind even better.
+We're gearing up for **astro-gcp-cloudrun-starter 2.0**, and we want it to be shaped by you, our community. Join the discussion and share your ideas, suggestions, and feedback to help us make astro-gcp-cloudrun-starter even better.
 
-[Share Your Feedback in Our Discussion!](https://github.com/arthelokyo/astrowind/discussions/392)
+[Share Your Feedback in Our Discussion!](https://github.com/adammerrill/astro-gcp-cloudrun-starter/discussions/392)
 
 <br>
 
 ## TL;DR
 
 ```shell
-npm create astro@latest -- --template arthelokyo/astrowind
+npm create astro@latest -- --template adammerrill/astro-gcp-cloudrun-starter
 ```
 
 ## Getting started
 
-**AstroWind** tries to give you quick access to creating a website using [Astro v6](https://astro.build/) + [Tailwind CSS v4](https://tailwindcss.com/). It's a free theme which focuses on simplicity, good practices and high performance.
+**astro-gcp-cloudrun-starter** tries to give you quick access to creating a website using [Astro v6](https://astro.build/) + [Tailwind CSS v4](https://tailwindcss.com/). It's a free theme which focuses on simplicity, good practices and high performance.
 
 Very little vanilla javascript is used only to provide basic functionality so that each developer decides which framework (React, Vue, Svelte, Solid JS...) to use and how to approach their goals.
 
@@ -79,7 +85,7 @@ Very little vanilla javascript is used only to provide basic functionality so th
 
 ### Project structure
 
-Inside **AstroWind** template, you'll see the following folders and files:
+Inside **astro-gcp-cloudrun-starter** template, you'll see the following folders and files:
 
 ```
 /
@@ -136,7 +142,7 @@ There's nothing special about `src/components/`, but that's where we like to put
 
 Any static assets, like images, can be placed in the `public/` directory if they do not require any transformation or in the `assets/` directory if they are imported directly.
 
-[![Edit AstroWind on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://githubbox.com/arthelokyo/astrowind/tree/main) [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/arthelokyo/astrowind)
+[![Edit astro-gcp-cloudrun-starter on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://githubbox.com/adammerrill/astro-gcp-cloudrun-starter/tree/main) [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/adammerrill/astro-gcp-cloudrun-starter)
 
 > 🧑‍🚀 **Seasoned astronaut?** Delete this file `README.md`. Update `src/config.yaml` and contents. Have fun!
 
@@ -264,7 +270,7 @@ prefer.
 
 Clone this repository on your own GitHub account and deploy it to Netlify:
 
-[![Netlify Deploy button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/arthelokyo/astrowind)
+[![Netlify Deploy button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/adammerrill/astro-gcp-cloudrun-starter)
 
 #### Deploy to Vercel
 
@@ -276,7 +282,14 @@ Clone this repository on your own GitHub account and deploy to Vercel:
 
 Clone this repository on your own GitHub account and deploy to PandaStack:
 
-[![Deploy to PandaStack](https://dashboard.pandastack.io/deploy-button.svg)](https://dashboard.pandastack.io/deploy?repo=arthelokyo/astrowind&type=static&buildCmd=npm+run+build&outputDir=dist)
+[![Deploy to PandaStack](https://dashboard.pandastack.io/deploy-button.svg)](https://dashboard.pandastack.io/deploy?repo=adammerrill/astro-gcp-cloudrun-starter&type=static&buildCmd=npm+run+build&outputDir=dist)
+
+#### Deploy to Google Cloud Platform (GCP)
+
+For deploying to Google Cloud Platform with Terraform-managed infrastructure (Cloud Run, WIF, VPC, GCS, IAM, etc.), see the following guides:
+
+- [Setup Playbook](./docs/SETUP_PLAYBOOK.md) — Step-by-step instructions for initial manual bootstrap and Terraform backend migration.
+- [IaC Governance Rules](./docs/IAC_RULES.md) — The 8 developer rules for managing infrastructure changes.
 
 <br>
 
@@ -295,8 +308,8 @@ That would be very useful for all of us and we would be happy to listen and take
 
 ## Acknowledgements
 
-Initially created by **Arthelokyo** and maintained by a community of [contributors](https://github.com/arthelokyo/astrowind/graphs/contributors).
+Initially created by **Arthelokyo** and maintained by a community of [contributors](https://github.com/adammerrill/astro-gcp-cloudrun-starter/graphs/contributors).
 
 ## License
 
-**AstroWind** is licensed under the MIT license — see the [LICENSE](./LICENSE.md) file for details.
+**astro-gcp-cloudrun-starter** is licensed under the MIT license — see the [LICENSE](./LICENSE.md) file for details.

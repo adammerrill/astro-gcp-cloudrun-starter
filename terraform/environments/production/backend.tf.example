@@ -1,0 +1,9 @@
+# backend.tf.example — GCS backend configured for the production environment.
+# Copy this file to "backend.tf" and replace "YOUR_PROJECT_PREFIX-tf-state" with your actual GCS state bucket name.
+
+terraform {
+  backend "gcs" {
+    bucket = "YOUR_PROJECT_PREFIX-tf-state"
+    prefix = "production"
+  }
+}

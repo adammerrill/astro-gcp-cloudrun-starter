@@ -13,7 +13,7 @@ import icon from 'astro-icon';
 import compress from 'astro-compress';
 import type { AstroIntegration } from 'astro';
 
-import astrowind from './vendor/integration';
+import templateConfig from './vendor/integration';
 
 import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from './src/utils/frontmatter';
 
@@ -65,7 +65,7 @@ export default defineConfig({
       Logger: 1,
     }),
 
-    astrowind({
+    templateConfig({
       config: './src/config.yaml',
     }),
   ],
