@@ -31,3 +31,10 @@ variable "developer_email" {
   description = "Email of the developer to grant impersonation access"
   type        = string
 }
+
+variable "terraform_service_account_id" {
+  description = "The account ID for the Terraform admin service account"
+  type        = string
+  default     = "sa-terraform-admin"
+}
+

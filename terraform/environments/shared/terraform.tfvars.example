@@ -1,0 +1,20 @@
+# environments/shared/terraform.tfvars.example
+# Copy this file to "terraform.tfvars" and fill in your values.
+
+# GCP Billing Account ID (format: XXXXXX-XXXXXX-XXXXXX)
+billing_account_id = "YOUR_BILLING_ACCOUNT_ID"
+
+# Naming prefix for your projects and GCS state bucket (e.g. "mycompany")
+project_prefix = "YOUR_PROJECT_PREFIX"
+
+# Primary region for shared resources
+region = "us-central1"
+
+# Disaster recovery backup region
+dr_region = "us-east1"
+
+# GitHub username or organization name for WIF condition
+github_owner = "YOUR_GITHUB_OWNER"
+
+# Service account to impersonate (created by the bootstrap module)
+terraform_service_account = "sa-terraform-admin@YOUR_PROJECT_PREFIX-shared.iam.gserviceaccount.com"

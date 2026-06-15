@@ -117,7 +117,7 @@ resource "google_storage_bucket" "tf_state" {
 
 resource "google_service_account" "tf_admin" {
   project      = google_project.shared.project_id
-  account_id   = "sa-terraform-admin"
+  account_id   = var.terraform_service_account_id
   display_name = "Terraform Admin Service Account"
 
   depends_on = [google_project_service.seed]

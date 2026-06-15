@@ -1,0 +1,43 @@
+# environments/staging/terraform.tfvars.example
+# Copy this file to "terraform.tfvars" and fill in your values.
+
+# GCP Billing Account ID (format: XXXXXX-XXXXXX-XXXXXX)
+billing_account_id = "YOUR_BILLING_ACCOUNT_ID"
+
+# The target GCP project ID for your Staging environment (e.g., "mycompany-staging")
+project_id = "YOUR_PROJECT_PREFIX-staging"
+
+# Naming prefix for your projects and GCS state bucket (e.g., "mycompany")
+project_prefix = "YOUR_PROJECT_PREFIX"
+
+# Primary region for resources
+region = "us-central1"
+
+# Disaster recovery backup region
+dr_region = "us-east1"
+
+# Environment identifier
+environment = "staging"
+
+# Shared infrastructure project ID
+shared_project_id = "YOUR_PROJECT_PREFIX-shared"
+
+# Service account to impersonate (created by the bootstrap module)
+terraform_service_account = "sa-terraform-admin@YOUR_PROJECT_PREFIX-shared.iam.gserviceaccount.com"
+
+# Cost ceiling
+monthly_budget_usd = 5
+
+# Cloud Run limits
+cloud_run_min_instances = 0
+cloud_run_max_instances = 2
+cloud_run_cpu_limit     = "0.5"
+cloud_run_memory_limit  = "256Mi"
+
+# Feature Gates (Disabled by default on Day 1 for cost-efficiency)
+enable_networking    = false
+enable_dns           = false
+enable_cloud_armor   = false
+enable_load_balancer = false
+enable_cloud_sql     = false
+enable_vertex_ai     = false

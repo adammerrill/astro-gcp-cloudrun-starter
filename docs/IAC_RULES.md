@@ -33,3 +33,7 @@ If the GCP Console shows a resource or configuration that is not defined in Terr
 
 ### RULE 8 — Everything reproducible
 The setup process must be completely self-contained. A new engineer must be able to stand up an identical environment from the Setup Playbook and the Terraform configuration with only the initial seed and zero tribal knowledge.
+
+### RULE 9 — Never commit a real config file
+Never commit environment-specific or sensitive configuration files (`terraform.tfvars`, `backend.tf`, `.env`) to the repository. Only commit their `.example` or `.template` counterparts with descriptive comments and placeholders. All real values must remain untracked and local, or managed securely via GCP Secret Manager.
+

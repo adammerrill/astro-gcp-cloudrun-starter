@@ -1,11 +1,17 @@
-# 🚀 AstroWind
+# 🚀 AstroWind + GCP Cloud Run Starter Template
 
 <img src="https://raw.githubusercontent.com/arthelokyo/.github/main/resources/astrowind/lighthouse-score.png" align="right"
      alt="AstroWind Lighthouse Score" width="100" height="358">
 
 🌟 _Most *starred* & *forked* Astro theme in 2022, 2023, 2024 & 2025_. 🌟
 
-**AstroWind** is a free and open-source template to make your website using **[Astro v6](https://astro.build/) + [Tailwind CSS v4](https://tailwindcss.com/)**. Ready to start a new project and designed taking into account web best practices.
+**AstroWind + GCP Cloud Run Starter Template** is a production-ready repository that serves as a reusable GCP Cloud Run web-app starter template. It allows any developer to branch or use this repository as a GitHub Template to stand up any type of containerized web application on Google Cloud Run with a secure, zero-secrets-in-git foundation.
+
+For setting up and deploying the infrastructure, see our guides:
+- [Template Quickstart](./docs/TEMPLATE_SETUP.md) — How to use this repository as a starter template.
+- [Setup Playbook](./docs/SETUP_PLAYBOOK.md) — Step-by-step instructions for initial manual bootstrap and Terraform backend migration.
+- [IaC Governance Rules](./docs/IAC_RULES.md) — The 9 developer rules for managing infrastructure changes.
+
 
 - ✅ **Production-ready** scores in **PageSpeed Insights** reports.
 - ✅ Integration with **Tailwind CSS v4** supporting **Dark mode** and **_RTL_**.
