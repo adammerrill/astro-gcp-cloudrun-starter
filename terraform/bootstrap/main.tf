@@ -58,6 +58,7 @@ locals {
     "cloudresourcemanager.googleapis.com",
     "serviceusage.googleapis.com",
     "iam.googleapis.com",
+    "iamcredentials.googleapis.com",
     "storage.googleapis.com",
   ]
   projects = {
