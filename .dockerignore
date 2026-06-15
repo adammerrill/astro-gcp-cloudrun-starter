@@ -1,4 +1,36 @@
-dist/
-node_modules/
-.vscode/
+# Version control
+.git/
+.gitignore
+
+# CI/CD and IDE
 .github/
+.vscode/
+.agents/
+
+# Dependencies and build output (rebuilt in container)
+node_modules/
+dist/
+
+# Documentation (not needed in image)
+*.md
+!README.md
+
+# Docker meta
+.dockerignore
+docker-compose.yml
+
+# Deployment configs for other platforms
+netlify.toml
+vercel.json
+sandbox.config.json
+.stackblitzrc
+
+# Code quality (not needed in image)
+.editorconfig
+.prettierrc.mjs
+.prettierignore
+eslint.config.js
+vscode.tailwind.json
+
+# Infrastructure (never in image)
+terraform/
