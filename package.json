@@ -1,7 +1,7 @@
 {
-  "name": "@onwidget/astrowind",
-  "version": "1.0.0-beta.63",
-  "description": "AstroWind: A free template using Astro 6 and Tailwind CSS v4. Astro starter theme.",
+  "name": "astro-gcp-cloudrun-starter",
+  "version": "1.0.0",
+  "description": "Astro + GCP Cloud Run starter template with Terraform foundation.",
   "type": "module",
   "private": true,
   "engines": {
