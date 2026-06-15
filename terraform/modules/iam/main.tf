@@ -57,7 +57,7 @@ resource "google_iam_workload_identity_pool_provider" "github" {
     "attribute.owner"      = "assertion.repository_owner"
   }
 
-  attribute_condition = "assertion.repository_owner == '${var.github_owner}'"
+  attribute_condition = "assertion.repository == '${var.github_repo}'"
 
   oidc {
     issuer_uri = "https://token.actions.githubusercontent.com"
@@ -78,7 +78,7 @@ resource "google_service_account_iam_member" "deploy_wif_binding" {
 
   service_account_id = google_service_account.deploy[0].name
   role               = "roles/iam.workloadIdentityUser"
-  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github[0].name}/attribute.owner/${var.github_owner}"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github[0].name}/attribute.repository/${var.github_repo}"
 }
 
 resource "google_project_iam_member" "deploy_ar_writer" {
