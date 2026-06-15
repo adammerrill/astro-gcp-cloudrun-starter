@@ -30,7 +30,10 @@ provider "google" {
 data "google_service_account_access_token" "default" {
   provider               = google.impersonation
   target_service_account = var.terraform_service_account
-  scopes                 = ["cloud-platform", "userinfo.email"]
+  scopes = [
+    "https://www.googleapis.com/auth/cloud-platform",
+    "https://www.googleapis.com/auth/userinfo.email",
+  ]
   lifetime               = "3600s"
 }
 
