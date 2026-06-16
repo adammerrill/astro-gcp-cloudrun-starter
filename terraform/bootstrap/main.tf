@@ -142,6 +142,10 @@ locals {
     "roles/resourcemanager.projectIamAdmin",
     "roles/iam.workloadIdentityPoolAdmin",
     "roles/iam.serviceAccountAdmin",
+    "roles/run.admin",
+    "roles/logging.configWriter",
+    "roles/monitoring.admin",
+    "roles/secretmanager.admin",
   ]
   project_roles = flatten([
     for p_key, p_id in local.projects : [
