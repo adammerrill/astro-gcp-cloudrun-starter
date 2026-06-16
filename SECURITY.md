@@ -76,8 +76,8 @@ Security**). Current state:
 
 - ✅ Dependency graph · ✅ Dependabot **alerts** (1 rule) · ✅ **malware alerts** ·
   ✅ **security updates** · ✅ **grouped security updates**.
-- ⬜ Dependabot **version updates** — not yet enabled; requires a
-  `.github/dependabot.yml` config (optional follow-up).
+- ✅ Dependabot **version updates** — configured in `.github/dependabot.yml`
+  (weekly, grouped: npm, github-actions, docker base images).
 - ⬜ Automatic dependency submission — off (not needed for this stack).
 
 **Reporting**
