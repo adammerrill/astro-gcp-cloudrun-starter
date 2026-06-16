@@ -32,6 +32,12 @@ variable "github_repo" {
   default     = "adammerrill/astro-gcp-cloudrun-starter"
 }
 
+variable "deploy_service_account_email" {
+  description = "GitHub Actions deploy SA email (lives in the shared project). When set, this environment grants it run.developer and serviceAccountUser on the runtime SA so CI can deploy Cloud Run revisions. Leave empty for the shared layer."
+  type        = string
+  default     = ""
+}
+
 variable "enable_cloud_sql" {
   description = "Create Cloud SQL service account"
   type        = bool

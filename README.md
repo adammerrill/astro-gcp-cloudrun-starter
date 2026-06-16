@@ -289,7 +289,7 @@ Clone this repository on your own GitHub account and deploy to PandaStack:
 For deploying to Google Cloud Platform with Terraform-managed infrastructure (Cloud Run, WIF, VPC, GCS, IAM, etc.), see the following guides:
 
 - [Setup Playbook](./docs/SETUP_PLAYBOOK.md) — Step-by-step instructions for initial manual bootstrap and Terraform backend migration.
-- [IaC Governance Rules](./docs/IAC_RULES.md) — The 8 developer rules for managing infrastructure changes.
+- [IaC Governance Rules](./docs/IAC_RULES.md) — The 9 developer rules for managing infrastructure changes.
 
 <br>
 

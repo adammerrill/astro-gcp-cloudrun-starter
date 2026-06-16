@@ -1,0 +1,16 @@
+# bootstrap/backend.tf.example
+#
+# Two-stage bootstrap:
+#   1. FIRST `terraform apply` runs with LOCAL state (this file absent) to
+#      create the projects + the GCS state bucket (PREFIX-tf-state).
+#   2. THEN copy this file to "backend.tf", set the bucket name, and run
+#      `terraform init -migrate-state` to move state into GCS.
+#
+# backend.tf is git-ignored; only this .example is committed.
+
+terraform {
+  backend "gcs" {
+    bucket = "YOUR_PROJECT_PREFIX-tf-state"
+    prefix = "bootstrap"
+  }
+}

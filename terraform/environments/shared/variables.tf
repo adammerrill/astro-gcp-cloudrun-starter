@@ -1,7 +1,7 @@
 variable "create_project" {
   type        = bool
-  description = "Whether to create the GCP project"
-  default     = true
+  description = "Whether Terraform should create the GCP project. The bootstrap module already creates all projects, so environment layers default to false and adopt the existing project."
+  default     = false
 }
 
 variable "project_name" {

@@ -28,8 +28,24 @@ Every environment-specific or sensitive configuration file is git-ignored. You m
 
 ### 3. Bootstrap your GCP Foundation
 
-Follow the instructions in the [Setup Playbook](./SETUP_PLAYBOOK.md) to log in locally with `gcloud`, run the bootstrap module to spawn your projects and SA, and migrate your state to GCS.
+Follow the instructions in the [Setup Playbook](./SETUP_PLAYBOOK.md) to log in locally with `gcloud`, run the bootstrap module to spawn your projects and SA, and migrate your state to GCS. For the complete, ordered path from zero to a live URL, use the [Fresh User Walkthrough](./FRESH_USER_WALKTHROUGH.md).
 
-### 4. Replace the Scaffold Application
+### 4. Customize the Application
 
-The `/app/` directory contains a placeholder Node.js server. Replace the files in `/app/` with your real web application (Next.js, FastAPI, Go, etc.). Ensure your Dockerfile compiles successfully and exposes a web server listening on the `$PORT` environment variable.
+This template **is** the application — an [Astro](https://astro.build/) static site at the repository root. There is no separate `/app/` server.
+
+- Source lives in `src/` (pages, components, content); site config is `src/config.yaml`.
+- The root **`Dockerfile`** is the build contract: it builds the static site with Node 22 (`npm run build` → `dist/`) and serves it with **nginx on port 8080** (the port Cloud Run sends traffic to). You do not need a `$PORT`-listening Node server.
+- To use a different framework, replace the source and update the root `Dockerfile`, keeping the container listening on **8080**.
+
+Verify your build locally before deploying:
+
+```bash
+npm install
+npm run build          # produces dist/
+docker build -t website:local .   # must succeed
+```
+
+### 5. Wire up CI/CD (GitHub Actions Variables)
+
+Deploys run keylessly via Workload Identity Federation — there are **no secrets** to store. After the shared layer is applied, set the GitHub Actions **Variables** (not Secrets) that the deploy workflow reads. The exact list, values, and `gh` commands are in the [Fresh User Walkthrough](./FRESH_USER_WALKTHROUGH.md#5-configure-github-actions-variables).

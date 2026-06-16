@@ -103,6 +103,27 @@ resource "google_project_iam_member" "deploy_ar_writer" {
   member  = "serviceAccount:${google_service_account.deploy[0].email}"
 }
 
+# ─── Deploy SA grants on THIS environment's project (cross-project) ───
+# The GitHub Actions deploy SA is created once in the shared project, but to
+# ship a new Cloud Run revision here it also needs, on the environment project:
+#   - roles/run.developer            (deploy/update the service)
+#   - roles/iam.serviceAccountUser   (act as the Cloud Run runtime SA)
+# These are gated on deploy_service_account_email so only environment layers
+# (which pass it) create them; the shared layer leaves it empty.
+resource "google_project_iam_member" "deploy_run_developer" {
+  count   = var.deploy_service_account_email != "" ? 1 : 0
+  project = var.project_id
+  role    = "roles/run.developer"
+  member  = "serviceAccount:${var.deploy_service_account_email}"
+}
+
+resource "google_service_account_iam_member" "deploy_act_as_runtime" {
+  count              = var.deploy_service_account_email != "" ? 1 : 0
+  service_account_id = google_service_account.cloudrun.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${var.deploy_service_account_email}"
+}
+
 # ─── Feature-gated service accounts ───
 resource "google_service_account" "cloudsql" {
   count = var.enable_cloud_sql ? 1 : 0
