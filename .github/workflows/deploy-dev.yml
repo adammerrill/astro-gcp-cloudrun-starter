@@ -3,6 +3,7 @@ name: Deploy Dev
 on:
   push:
     branches: [main]
+  workflow_dispatch: {} # manual "redeploy current main" button (Actions tab)
 
 jobs:
   deploy:
