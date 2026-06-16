@@ -1,35 +1,62 @@
 ---
-publishDate: 2023-07-17T00:00:00Z
-title: AstroWind template in depth
-excerpt: While easy to get started, Astrowind is quite complex internally.  This page provides documentation on some of the more intricate parts.
-image: https://images.unsplash.com/photo-1534307671554-9a6d81f4d629?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1651&q=80
+publishDate: 2026-06-16T00:00:00Z
+title: The template in depth — architecture, modules, and CI
+excerpt: A tour of how astro-gcp-cloudrun-starter is put together — the Terraform layers and modules, the keyless CI/CD pipeline, and the hardened container that runs on Cloud Run.
+image: https://images.unsplash.com/photo-1534307671554-9a6d81f4d629?ixlib=rb-4.0.3&auto=format&fit=crop&w=1651&q=80
 category: Documentation
 tags:
-  - astro
-  - tailwind css
-  - front-end
+  - gcp
+  - terraform
+  - cloud run
+  - ci/cd
 metadata:
-  canonical: https://astrowind.vercel.app/astrowind-template-in-depth
+  canonical: https://github.com/adammerrill/astro-gcp-cloudrun-starter
 ---
 
-## Mauris velit laoreet vitae cursus augue
+While it's quick to deploy, this template has a fair amount going on internally. This page documents the moving parts so you can adapt them with confidence.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. **Pellentesque** euismod, nibh ac aliquam aliquam, dui nulla ultrices erat, sit amet dictum nisl ex id nunc. Sed malesuada, orci vitae tempus euismod, nunc erat semper nisi, in aliquet nibh nisl eget nulla. Donec eget ipsum vitae nibh blandit consequat. Donec facilisis, nibh id aliquam fermentum, mi lorem molestie nisl, id posuere nisi nisi at nulla.
+## Repository layout
 
-Duis euismod, nulla sit amet mattis euismod, nibh nunc rhoncus nibh, id interdum nunc nisl id lorem. Donec id nunc quis nulla aliquam cursus. Integer vitae nunc nunc. Sed sed nulla vitae nibh interdum gravida. Sed a nunc nibh.
+```
+src/                      # Astro v6 site (pages, components, content, config.yaml)
+Dockerfile                # multi-stage: Node 22 build → nginx:8080 serve (~25MB, non-root)
+.github/workflows/        # deploy-dev / staging / prod (keyless, app-deploy-only)
+terraform/
+  bootstrap/              # one-time seed: projects, state bucket, automation SA
+  environments/           # shared, dev, staging, production layers
+  modules/                # iam, cloud_run, artifact_registry, monitoring, logging,
+                          # secret_manager, cost_governance, networking, ...
+docs/                     # SETUP_PLAYBOOK, FRESH_USER_WALKTHROUGH, IAC_RULES, GAP_REGISTER
+```
 
-Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer euismod, nunc eu lobortis mattis, lectus sem sagittis nunc, id laoreet nunc metus id lectus. Sed consectetur, urna at euismod consectetur, nunc nisi bibendum nibh, ut rhoncus nibh nunc vel mi.
+## The Terraform layers
 
-Nam eget nunc massa. Nulla facilisi. Sed a ligula vel nunc porta sollicitudin. **Pellentesque** vel mauris vitae nibh varius feugiat. Fusce eget nunc id ligula bibendum venenatis.
+The infrastructure is deliberately split so that the dangerous, one-time setup is isolated from day-to-day changes:
 
-### Nisi rutrum eros euismod
+- **`bootstrap`** runs once with local state, creates the four projects + the GCS state bucket + the `sa-terraform-admin` automation account, then migrates its own state into GCS. It also enables the seed APIs that every later step depends on (including `iamcredentials` and `cloudbilling`).
+- **`shared`** holds the cross-cutting resources: the Workload Identity pool/provider (scoped to this repo), the GitHub deploy service account, and the Artifact Registry.
+- **`environments/*`** each adopt their bootstrap-created project (`create_project = false`) and compose the modules into a running environment.
 
-Maecenas eget justo sed nibh consequat vulputate. Sed euismod neque vel nunc rhoncus, nec tincidunt nisl laoreet. Sed euismod justo id nulla varius, id cursus nibh tincidunt. Sed euismod est et nunc consectetur, id tempus nibh euismod.
+## Notable modules
 
-In hac habitasse platea dictumst. Integer euismod, nunc eu lobortis mattis, lectus sem sagittis nunc, id laoreet nunc metus id lectus. Aenean sagittis, ligula vel blandit aliquam, nisl nunc euismod elit, nec tincidunt lectus nunc vitae nunc. Sed euismod justo id nulla varius, id cursus nibh tincidunt. Sed euismod est et nunc consectetur, id tempus nibh euismod.
+- **`iam`** — runtime and deploy service accounts, the WIF pool/provider, and the cross-project grants that let the deploy SA ship Cloud Run revisions and pull images from the shared registry.
+- **`cloud_run`** — the v2 service with enforced resource limits, scale-to-zero, CPU throttling, liveness/startup probes, and optional Secret-Manager-backed env vars.
+- **`cost_governance`** — a per-project billing budget with 50/80/100% alerts.
+- **`monitoring` / `logging`** — uptime checks, an availability SLO, alert policies, and audit log export.
+- Feature-gated modules (`networking`, `cloud_sql`, `dns`, `load_balancer`, `cloud_armor`, `vertex_ai`) are **off by default** for cost and are enabled per-environment via tfvars.
 
-### Nisi rutrum eros euismod
+## The CI/CD pipeline
 
-Quisque euismod lectus ac nunc dictum, id eleifend nunc euismod. Sed euismod, nunc eu lobortis mattis, lectus sem sagittis nunc, id laoreet nunc metus id lectus. Sed consectetur, urna at euismod consectetur, nunc nisi bibendum nibh, ut rhoncus nibh nunc vel mi.
+The deploy workflows authenticate to GCP with **Workload Identity Federation** — no stored secrets. They build the container, push it to Artifact Registry tagged with the commit SHA, deploy a new Cloud Run revision, and smoke-test the public URL.
 
-Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed euismod est et nunc consectetur, id tempus nibh euismod.
+Crucially, the pipeline is **app-deploy-only**: it ships images but does not run `terraform apply`. Infrastructure is changed deliberately from a controlled environment, which keeps the CI identity least-privilege — it cannot alter or destroy your infrastructure.
+
+## The container
+
+A multi-stage `Dockerfile` builds the static Astro site with Node 22, then serves `dist/` with **nginx on port 8080** as a non-root user. The result is a ~25MB image with a health check. To use a different framework, keep that contract — build your app and listen on 8080 — and the rest of the template carries over unchanged.
+
+## Where to go next
+
+- [Fresh User Walkthrough](https://github.com/adammerrill/astro-gcp-cloudrun-starter/blob/main/docs/FRESH_USER_WALKTHROUGH.md) — zero to a live URL.
+- [Setup Playbook](https://github.com/adammerrill/astro-gcp-cloudrun-starter/blob/main/docs/SETUP_PLAYBOOK.md) — bootstrap and Terraform detail.
+- [IaC Governance Rules](https://github.com/adammerrill/astro-gcp-cloudrun-starter/blob/main/docs/IAC_RULES.md) — the 9 rules that keep the infrastructure reproducible.
