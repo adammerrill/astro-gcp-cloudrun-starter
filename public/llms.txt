@@ -1,0 +1,35 @@
+# astro-gcp-cloudrun-starter
+
+> A production-ready, open-source (MIT) GitHub template that deploys an Astro v6 + Tailwind CSS v4 website to Google Cloud Run using keyless Workload Identity Federation, Terraform-managed infrastructure, and a scale-to-zero cost profile of roughly $0/month.
+
+This file is an LLM-friendly index of the project (see https://llmstxt.org/).
+The project lets any developer stand up a containerized web app on Google Cloud
+Run with a zero-secrets, fully reproducible Infrastructure-as-Code foundation:
+no service-account keys exist anywhere, identity is keyless, and only
+placeholder `.example` files are committed to the public repository.
+
+## Key facts
+
+- Keyless deploys: GitHub Actions authenticates to GCP via Workload Identity
+  Federation (OIDC), scoped to this exact repository. No JSON keys.
+- Infrastructure as code: Terraform layers (bootstrap → shared → environment)
+  provision projects, Artifact Registry, Cloud Run, IAM, monitoring, logging,
+  and a billing budget. State lives in Google Cloud Storage.
+- Cost: min-instances = 0 (scale to zero), a low max-instances cap, smallest
+  sensible CPU/memory, and a billing budget with alerts. Estimated ≈ $0/month.
+- Container: a multi-stage Dockerfile builds the static Astro site and serves it
+  with nginx on port 8080 (~25 MB, non-root image).
+- Time to deploy: about 30–45 minutes of active work from a clean GCP account.
+
+## Documentation
+
+- [Fresh User Walkthrough](https://github.com/adammerrill/astro-gcp-cloudrun-starter/blob/main/docs/FRESH_USER_WALKTHROUGH.md): the single authoritative path from a clean GCP account to a live, public Cloud Run URL.
+- [Setup Playbook](https://github.com/adammerrill/astro-gcp-cloudrun-starter/blob/main/docs/SETUP_PLAYBOOK.md): bootstrap and Terraform detail.
+- [IaC Governance Rules](https://github.com/adammerrill/astro-gcp-cloudrun-starter/blob/main/docs/IAC_RULES.md): the 9 rules that keep the infrastructure reproducible.
+- [Performance & Crawler Access](https://github.com/adammerrill/astro-gcp-cloudrun-starter/blob/main/docs/PERFORMANCE_AND_CRAWLING.md): Core Web Vitals and AI-crawler policy.
+- [Template Quickstart](https://github.com/adammerrill/astro-gcp-cloudrun-starter/blob/main/docs/TEMPLATE_SETUP.md): how to use this repository as a template.
+
+## Source
+
+- [GitHub repository](https://github.com/adammerrill/astro-gcp-cloudrun-starter)
+- License: MIT
