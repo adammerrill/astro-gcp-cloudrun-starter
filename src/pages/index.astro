@@ -13,7 +13,7 @@ import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 
 const metadata = {
-  title: 'AstroWind — Free template for creating websites with Astro + Tailwind CSS',
+  title: 'astro-gcp-cloudrun-starter — Deploy Astro to Google Cloud Run, keyless & cost-optimized',
   ignoreTitleTemplate: true,
 };
 ---
@@ -25,77 +25,77 @@ const metadata = {
     actions={[
       {
         variant: 'primary',
-        text: 'Get template',
-        href: 'https://github.com/arthelokyo/astrowind',
+        text: 'Use this template',
+        href: 'https://github.com/adammerrill/astro-gcp-cloudrun-starter',
         target: '_blank',
-        icon: 'tabler:download',
+        icon: 'tabler:brand-github',
       },
-      { text: 'Learn more', href: '#features' },
+      { text: 'How it works', href: '#features' },
     ]}
-    image={{ src: '~/assets/images/hero-image.png', alt: 'AstroWind Hero Image' }}
+    image={{ src: '~/assets/images/hero-image.png', alt: 'astro-gcp-cloudrun-starter Hero Image' }}
   >
     <Fragment slot="title">
-      Free template for <span class="hidden xl:inline">creating websites with</span>
-      <span class="text-accent dark:text-white"> Astro v6</span> + Tailwind CSS
+      Ship Astro to <span class="hidden xl:inline">Google</span>
+      <span class="text-accent dark:text-white"> Cloud Run</span> — keyless &amp; cost-optimized
     </Fragment>
 
     <Fragment slot="subtitle">
       <span class="hidden sm:inline">
-        <span class="font-semibold">AstroWind</span> is a free, customizable and production-ready template for Astro v6 +
-        Tailwind CSS v4.</span
+        <span class="font-semibold">astro-gcp-cloudrun-starter</span> is a production-ready, zero-secrets template: an Astro
+        v6 + Tailwind CSS v4 site, a complete Terraform foundation, and keyless GitHub Actions deploys to Google Cloud Run.</span
       >
-      <span class="block mb-1 sm:hidden font-bold text-blue-600">AstroWind: Production-ready.</span>
-      Suitable for Startups, Small Business, SaaS websites, Professional Portfolios, Marketing websites, Landing Pages & Blogs.
+      <span class="block mb-1 sm:hidden font-bold text-blue-600">Astro → Cloud Run, keyless &amp; ~$0/mo.</span>
+      Workload Identity Federation, scale-to-zero economics, and a hardened, fully reproducible IaC stack.
     </Fragment>
   </Hero>
 
   <!-- Note Widget ******************* -->
 
-  <Note title="Philosophy:" description="Simplicity, Best Practices and High Performance" />
+  <Note title="Principles:" description="Keyless identity · Reproducible IaC · Scale-to-zero by default" />
 
   <!-- Features Widget *************** -->
 
   <Features
     id="features"
-    tagline="Features"
-    title="What you get with AstroWind"
-    subtitle="One of the most professional and comprehensive templates currently on the market. Most starred & forked Astro theme in 2022, 2023, 2024 and 2025."
+    tagline="What you get"
+    title="A secure, cheap path from repo to public URL"
+    subtitle="Everything needed to stand up a containerized web app on Cloud Run — with no service-account keys, no secrets in git, and a perpetual-free-tier cost profile."
     items={[
       {
-        title: 'Astro + Tailwind CSS Integration',
+        title: 'Keyless Workload Identity Federation',
         description:
-          'A seamless integration between two great frameworks that offer high productivity, performance and versatility. Now powered by Tailwind CSS v4.',
-        icon: 'tabler:brand-tailwind',
+          'GitHub Actions exchanges its OIDC token for short-lived GCP credentials at deploy time. No service-account JSON keys exist anywhere — nothing to leak from a public repo. The WIF provider is scoped to this exact repository.',
+        icon: 'tabler:key-off',
       },
       {
-        title: 'Ready-to-use Components',
+        title: 'Terraform-managed infrastructure',
         description:
-          'Widgets made with Tailwind CSS v4 ready to be used in Marketing Websites, SaaS, Blogs, Personal Profiles, Small Business...',
-        icon: 'tabler:components',
+          'Bootstrap, shared, and per-environment layers provision projects, Artifact Registry, Cloud Run, IAM, monitoring, logging, and budgets. State lives in GCS. Every change is reviewable and reproducible.',
+        icon: 'tabler:cube',
       },
       {
-        title: 'Best Practices',
+        title: 'Scale-to-zero cost optimization',
         description:
-          'Creating secure, efficient, and user-friendly websites that deliver exceptional experiences and lasting value.',
-        icon: 'tabler:list-check',
+          'min-instances = 0, a low max-instances cap, the smallest sensible CPU/memory, and a billing budget with alerts. An idle public demo costs effectively ~$0/month within the perpetual free tier.',
+        icon: 'tabler:coin',
       },
       {
-        title: 'Excellent Page Speed',
+        title: 'Zero secrets in the repo',
         description:
-          'Having a good page speed impacts organic search ranking, improves user experience (UI/UX) and increase conversion rates.',
+          'Identity is keyless; app runtime secrets (if any) live in Google Secret Manager, injected into Cloud Run. Only placeholder .example files are committed — real values stay in GitHub Variables and your untracked tfvars.',
+        icon: 'tabler:lock',
+      },
+      {
+        title: 'Security-hardened by default',
+        description:
+          'Non-root, multi-stage container (~25MB nginx image), least-privilege deploy identity that cannot alter infrastructure, repo-scoped federation, and feature-gated network/DB modules off on day one.',
+        icon: 'tabler:shield-check',
+      },
+      {
+        title: 'Astro v6 + Tailwind CSS v4',
+        description:
+          'A fast, SEO-friendly static site with a blog, RSS, image optimization, and dark mode — built with the latest Astro and Tailwind, served by nginx on Cloud Run.',
         icon: 'tabler:rocket',
-      },
-      {
-        title: 'Search Engine Optimization (SEO)',
-        description:
-          "SEO lies in its ability to enhance a website's visibility, driving organic traffic and enabling it to reach a wider audience.",
-        icon: 'tabler:arrows-right-left',
-      },
-      {
-        title: 'Open to new ideas and contributions',
-        description:
-          'Embracing a culture that is open to new ideas and contributions is integral fostering innovation, collaboration, and a dynamic user experience.',
-        icon: 'tabler:bulb',
       },
     ]}
   />
@@ -104,33 +104,34 @@ const metadata = {
 
   <Content
     isReversed
-    tagline="Inside template"
-    title="AstroWind's Blueprint: Fun Meets Functionality!"
+    tagline="Architecture"
+    title="Bootstrap → Shared → Environment, all in Terraform"
     items={[
       {
-        title: 'Built on top of Astro v6',
+        title: 'Two-stage bootstrap',
         description:
-          'Benefiting from the performance and developer-friendly features of this modern static site generator.',
+          'A one-time seed creates the GCP projects, a GCS state bucket, and an automation service account, then migrates its own state into GCS.',
       },
       {
-        title: 'Styled using Tailwind CSS v4',
+        title: 'Shared layer',
         description:
-          'Facilitating rapid design and consistent styling with this highly popular utility-first CSS framework.',
+          'Provisions the Workload Identity pool/provider, the GitHub deploy service account, and the Artifact Registry that every environment pulls from.',
       },
       {
-        title: 'Cross-browser compatibility',
+        title: 'Environment layers',
         description:
-          'Ensure your website looks and functions consistently across various web browsers, delivering a seamless experience to all users.',
+          'dev / staging / prod each adopt their bootstrap-created project and stand up Cloud Run, IAM, monitoring, logging, and a billing budget — feature-gated extras off by default.',
       },
     ]}
     image={{
-      src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Colorful Image',
+      src: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2072&q=80',
+      alt: 'Cloud infrastructure',
     }}
   >
     <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Building on modern foundations</h3>
-      Gain a competitive advantage by incorporating industry leading practices
+      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Reproducible from the seed up</h3>
+      A new engineer can stand up an identical environment from the Setup Playbook and the Terraform configuration — with
+      zero tribal knowledge.
     </Fragment>
 
     <Fragment slot="bg">
@@ -144,69 +145,34 @@ const metadata = {
     isAfterContent
     items={[
       {
-        title: 'High level of customization',
-        description: `Tailor the template effortlessly to match your brand's identity and requirements, making your website distinct and saving you time.`,
+        title: 'Keyless deploy flow',
+        description:
+          'Push to main → GitHub Actions authenticates via WIF → builds the Astro container → pushes to Artifact Registry → deploys a new Cloud Run revision → smoke-tests the public URL.',
       },
       {
-        title: 'Multiple layout possibilities',
+        title: 'App-deploy-only CI',
         description:
-          'Explore various layout options to find the structure that best presents your content, enhancing user engagement and navigation.',
+          'The pipeline only ships images; it cannot modify infrastructure. Terraform is run deliberately from a controlled environment, keeping the deploy identity least-privilege.',
       },
       {
-        title: 'Fully responsive design',
+        title: 'Cost guardrails baked in',
         description:
-          "Ensure your website's optimal performance on various devices and screen sizes, providing a consistent and enjoyable user experience.",
+          'A per-project billing budget with 50/80/100% alerts and a low max-instances cap mean a public URL anyone can hit cannot autoscale into a surprise bill.',
       },
       {
-        title: 'Integration of media',
+        title: 'Verified secret-clean',
         description:
-          'Seamlessly incorporate images, videos, and multimedia elements that enhance your content and engage visitors effectively.',
+          'No real IDs, keys, or secrets in files, history, or CI logs — only the intended public demo URL and committed .example placeholders.',
       },
     ]}
     image={{
-      src: 'https://images.unsplash.com/photo-1600132806370-bf17e65e942f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2194&q=80',
-      alt: 'Blueprint Image',
+      src: 'https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+      alt: 'Pipeline and circuitry',
     }}
   >
-    <Fragment slot="content">Ensure your online presence truly represents you.</Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
-  <!-- Content Widget **************** -->
-
-  <Content
-    isReversed
-    isAfterContent
-    items={[
-      {
-        title: 'Enhanced user engagement',
-        description:
-          'Captivate your audience with interactive elements, intuitive navigation, and visually appealing layouts, encouraging longer visits.',
-      },
-      {
-        title: 'Continuous improvement',
-        description:
-          'Ensure your website stays aligned with the latest trends and technologies through regular updates and enhancements.',
-      },
-      {
-        title: 'Time and resource efficiency',
-        description:
-          'Skip the time-consuming process of building a website from scratch and launch your online presence sooner with AstroWind.',
-      },
-      {
-        title: 'Community support',
-        description: `Join the growing AstroWind community for insights, resources, and assistance, ensuring you're never alone on your web development journey.`,
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1611462985358-60d3498e0364?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Astronauts Image',
-    }}
-  >
-    <Fragment slot="content">Designed to foster growth and success.</Fragment>
+    <Fragment slot="content"
+      >Built so there is nothing sensitive to expose, and nothing costly to leave running.</Fragment
+    >
 
     <Fragment slot="bg">
       <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
@@ -216,33 +182,33 @@ const metadata = {
   <!-- Steps Widget ****************** -->
 
   <Steps
-    title="Get your dream website up and running in no time with AstroWind."
+    title="From template to a live, public Cloud Run URL — in about 30–45 minutes."
     items={[
       {
-        title: 'Step 1: <span class="font-medium">Download</span>',
+        title: 'Step 1: <span class="font-medium">Use this template</span>',
         description:
-          "Kickstart with GitHub! Either fork the AstroWind template or simply click 'Use this template'. Your canvas awaits, ready for your digital masterpiece. In just a few clicks, you've already set the foundation.",
-        icon: 'tabler:package',
+          "Click 'Use this template' on GitHub (or clone it). Copy each .example to its real, git-ignored counterpart and fill in your values — billing account, project prefix, region.",
+        icon: 'tabler:brand-github',
       },
       {
-        title: 'Step 2: <span class="font-medium">Add content</span>',
+        title: 'Step 2: <span class="font-medium">Bootstrap GCP</span>',
         description:
-          "Pour your vision into it. Add images, text, and all that jazz to breathe life into your digital space. Remember, it's the content that tells your story, so make it captivating.",
-        icon: 'tabler:letter-case',
+          'Authenticate keylessly with gcloud, run the bootstrap module to create your projects, state bucket, and automation SA, then apply the shared and dev layers with Terraform.',
+        icon: 'tabler:cloud-cog',
       },
       {
-        title: 'Step 3: <span class="font-medium">Customize styles</span>',
+        title: 'Step 3: <span class="font-medium">Wire CI &amp; deploy</span>',
         description:
-          'Give it your personal touch. Tailor colors, fonts, and layouts until it feels just right. Your unique flair, amplified by AstroWind! Precision in design ensures a seamless user experience.',
-        icon: 'tabler:paint',
+          'Set the GitHub Actions Variables from your Terraform outputs (no secrets), push to main, and watch the keyless pipeline build and deploy your site to Cloud Run.',
+        icon: 'tabler:rocket',
       },
       {
-        title: 'Ready!',
+        title: 'Live!',
         icon: 'tabler:check',
       },
     ]}
     image={{
-      src: 'https://images.unsplash.com/photo-1616198814651-e71f960c3180?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80',
+      src: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
       alt: 'Steps image',
     }}
   />
@@ -250,59 +216,56 @@ const metadata = {
   <!-- Features2 Widget ************** -->
 
   <Features2
-    title="Most used widgets"
-    subtitle="Provides frequently used components for building websites using Tailwind CSS v4"
-    tagline="Components"
+    title="What's in the box"
+    subtitle="A complete, modular Terraform foundation plus a polished Astro front end."
+    tagline="The stack"
     items={[
       {
-        title: 'Headers',
-        description: "Ever tried driving without GPS? Boom! That's why websites need headers for direction.",
+        title: 'Cloud Run',
+        description:
+          'Serverless container hosting with scale-to-zero, CPU throttling, and a public unauthenticated demo.',
         icon: 'flat-color-icons:template',
       },
       {
-        title: 'Heros',
-        description:
-          "Picture a superhero landing – epic, right? That's the job of a Hero section, making grand entrances!",
-        icon: 'flat-color-icons:gallery',
-      },
-      {
-        title: 'Features',
-        description:
-          'Where websites strut their stuff and show off superpowers. No holding back on the bragging rights here!',
+        title: 'Workload Identity Federation',
+        description: 'Keyless GitHub→GCP auth, scoped to this repo. No service-account keys anywhere.',
         icon: 'flat-color-icons:approval',
       },
       {
-        title: 'Content',
+        title: 'Artifact Registry',
+        description: 'Private Docker registry in the shared project, with image retention policies.',
+        icon: 'flat-color-icons:database',
+      },
+      {
+        title: 'Terraform modules',
         description:
-          "Dive into the meat and potatoes of a site; without it, you'd just be window shopping. Content is king.",
+          'iam, cloud_run, artifact_registry, monitoring, logging, secret_manager, cost_governance, and more.',
         icon: 'flat-color-icons:document',
       },
       {
-        title: 'Call-to-Action',
-        description:
-          'That enthusiastic friend who\'s always urging, "Do it! Do it!"? Yeah, that\'s this button nudging you towards adventure.',
-        icon: 'flat-color-icons:advertising',
-      },
-      {
-        title: 'Pricing',
-        description: 'Behold the dessert menu of the website world. Tempting choices await, can you resist?',
+        title: 'Cost governance',
+        description: 'A billing budget per project with 50/80/100% alerts — your sleep-at-night control.',
         icon: 'flat-color-icons:currency-exchange',
       },
       {
-        title: 'Testimonial',
-        description: 'Step into the gossip corner! Here, other visitors spill the beans and share the juicy details.',
+        title: 'Monitoring & logging',
+        description: 'Uptime checks, an availability SLO, alert policies, and audit log export — on by default.',
         icon: 'flat-color-icons:voice-presentation',
       },
       {
-        title: 'Contact',
-        description:
-          'Like a digital mailbox, but faster! Drop a line, ask a question, or send a virtual high-five. Ding! Message in.',
+        title: 'Secret Manager',
+        description: 'For any real runtime secret — injected into Cloud Run, never near the repo.',
         icon: 'flat-color-icons:business-contact',
       },
       {
-        title: 'Footers',
-        description: "The footer's like the credits of a movie but sprinkled with easter eggs. Time to hunt!",
-        icon: 'flat-color-icons:database',
+        title: 'Feature-gated extras',
+        description: 'VPC, Cloud SQL, DNS, Load Balancer, Cloud Armor, Vertex AI — all off on day one for cost.',
+        icon: 'flat-color-icons:advertising',
+      },
+      {
+        title: 'Astro + nginx container',
+        description: 'A ~25MB, non-root, multi-stage image serving the static build on port 8080.',
+        icon: 'flat-color-icons:gallery',
       },
     ]}
   >
@@ -314,10 +277,8 @@ const metadata = {
   <!-- HighlightedPosts Widget ******* -->
 
   <BlogLatestPosts
-    title="Find out more content in our Blog"
-    information={`The blog is used to display AstroWind documentation.
-                        Each new article will be an important step that you will need to know to be an expert in creating a website using Astro v6 + Tailwind CSS v4.
-                        Astro is a very interesting technology. Thanks.
+    title="Guides & deep dives on the blog"
+    information={`The blog documents how this template works — deploying to Cloud Run, the keyless Workload Identity Federation setup, the Terraform layers, and how the demo stays within the free tier.
                 `}
   />
 
@@ -325,39 +286,39 @@ const metadata = {
 
   <FAQs
     title="Frequently Asked Questions"
-    subtitle="Dive into the following questions to gain insights into the powerful features that AstroWind offers and how it can elevate your web development journey."
+    subtitle="The questions people ask before adopting a public GCP starter template."
     tagline="FAQs"
     classes={{ container: 'max-w-6xl' }}
     items={[
       {
-        title: 'Why AstroWind?',
+        title: 'How much does the demo cost to run?',
         description:
-          "Michael Knight a young loner on a crusade to champion the cause of the innocent. The helpless. The powerless in a world of criminals who operate above the law. Here he comes Here comes Speed Racer. He's a demon on wheels.",
+          'Effectively ~$0/month. With min-instances = 0 the service scales to zero and is not billed while idle, and a low-traffic static demo stays within Cloud Run’s perpetual free tier. A billing budget alert is created automatically as a backstop. (An estimate, not a guarantee — model your traffic with the GCP pricing calculator.)',
       },
       {
-        title: 'What do I need to start?',
+        title: 'Is it safe that the repo is public?',
         description:
-          'Space, the final frontier. These are the voyages of the Starship Enterprise. Its five-year mission: to explore strange new worlds. Many say exploration is part of our destiny, but it’s actually our duty to future generations.',
+          'Yes — that’s the core design. Identity is keyless via Workload Identity Federation, so there is no service-account key to leak. No secrets live in files, history, or CI logs; only placeholder .example files are committed.',
       },
       {
-        title: 'How to install the Astro + Tailwind CSS template?',
+        title: 'What does “keyless” actually mean?',
         description:
-          "Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows.",
+          'GitHub Actions presents an OIDC token that GCP exchanges for a short-lived credential at deploy time. The WIF provider only trusts tokens from this exact repository, so no other repo — even under the same owner — can assume the deploy identity.',
       },
       {
-        title: "What's something that you don't understand?",
+        title: 'What do I need to deploy it myself?',
         description:
-          "A flower in my garden, a mystery in my panties. Heart attack never stopped old Big Bear. I didn't even know we were calling him Big Bear.",
+          'A GCP billing account, the gcloud CLI, Terraform, and Docker. Follow the Setup Playbook and the Fresh User Walkthrough: bootstrap → shared → dev → set GitHub Variables → push to main. About 30–45 minutes of active work.',
       },
       {
-        title: 'What is something that you would like to try again?',
+        title: 'Can I use my own framework instead of Astro?',
         description:
-          "A business big enough that it could be listed on the NASDAQ goes belly up. Disappears! It ceases to exist without me. No, you clearly don't know who you're talking to, so let me clue you in.",
+          'Yes. The root Dockerfile is the contract: build your app and serve it on port 8080. Swap the source and the build steps; the Terraform foundation and CI are framework-agnostic.',
       },
       {
-        title: 'If you could only ask one question to each person you meet, what would that question be?',
+        title: 'How do I add a custom domain or a backend later?',
         description:
-          "This is not about revenge. This is about justice. A lot of things can change in twelve years, Admiral. Well, that's certainly good to know. About four years. I got tired of hearing how young I looked.",
+          'The template ships feature-gated modules for DNS, Load Balancer, Cloud Armor, VPC, and Cloud SQL — all disabled by default for cost. Enable them in your tfvars when you actually need them.',
       },
     ]}
   />
@@ -366,10 +327,10 @@ const metadata = {
 
   <Stats
     stats={[
-      { title: 'Downloads', amount: '132K' },
-      { title: 'Stars', amount: '24.8K' },
-      { title: 'Forks', amount: '10.3K' },
-      { title: 'Users', amount: '48.4K' },
+      { title: 'Monthly cost (idle)', amount: '~$0' },
+      { title: 'SA JSON keys', amount: '0' },
+      { title: 'Time to deploy', amount: '~40m' },
+      { title: 'IaC coverage', amount: '100%' },
     ]}
   />
 
@@ -379,20 +340,20 @@ const metadata = {
     actions={[
       {
         variant: 'primary',
-        text: 'Get template',
-        href: 'https://github.com/arthelokyo/astrowind',
+        text: 'Use this template',
+        href: 'https://github.com/adammerrill/astro-gcp-cloudrun-starter',
         target: '_blank',
-        icon: 'tabler:download',
+        icon: 'tabler:brand-github',
       },
     ]}
   >
     <Fragment slot="title">
-      Astro&nbsp;+&nbsp;<br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Tailwind CSS</span>
+      Astro&nbsp;+&nbsp;<br class="block sm:hidden" /><span class="sm:whitespace-nowrap">GCP Cloud Run</span>
     </Fragment>
 
     <Fragment slot="subtitle">
-      Be very surprised by these huge fake numbers you are seeing on this page. <br class="hidden md:inline" />Don't
-      waste more time! :P
+      Keyless, reproducible, and ~$0/month. <br class="hidden md:inline" />Branch it, configure it, and deploy your own
+      in under an hour.
     </Fragment>
   </CallToAction>
 </Layout>

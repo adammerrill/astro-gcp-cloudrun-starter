@@ -115,7 +115,9 @@ export const headerData = {
       href: '#',
     },
   ],
-  actions: [{ text: 'Download', href: 'https://github.com/arthelokyo/astrowind', target: '_blank' }],
+  actions: [
+    { text: 'Use this template', href: 'https://github.com/adammerrill/astro-gcp-cloudrun-starter', target: '_blank' },
+  ],
 };
 
 export const footerData = {
@@ -137,9 +139,9 @@ export const footerData = {
       links: [
         { text: 'Developer API', href: '#' },
         { text: 'Partners', href: '#' },
-        { text: 'Atom', href: '#' },
-        { text: 'Electron', href: '#' },
-        { text: 'AstroWind Desktop', href: '#' },
+        { text: 'Terraform modules', href: '#' },
+        { text: 'CI/CD workflows', href: '#' },
+        { text: 'Cloud Run', href: '#' },
       ],
     },
     {
@@ -174,9 +176,13 @@ export const footerData = {
     { ariaLabel: 'Instagram', icon: 'tabler:brand-instagram', href: '#' },
     { ariaLabel: 'Facebook', icon: 'tabler:brand-facebook', href: '#' },
     { ariaLabel: 'RSS', icon: 'tabler:rss', href: getAsset('/rss.xml') },
-    { ariaLabel: 'Github', icon: 'tabler:brand-github', href: 'https://github.com/arthelokyo/astrowind' },
+    {
+      ariaLabel: 'Github',
+      icon: 'tabler:brand-github',
+      href: 'https://github.com/adammerrill/astro-gcp-cloudrun-starter',
+    },
   ],
   footNote: `
-    Made by <a class="text-blue-600 underline dark:text-muted" href="https://github.com/arthelokyo"> Arthelokyo</a> · All rights reserved.
+    <a class="text-blue-600 underline dark:text-muted" href="https://github.com/adammerrill/astro-gcp-cloudrun-starter"> astro-gcp-cloudrun-starter</a> · Astro + GCP Cloud Run starter template.
   `,
 };
