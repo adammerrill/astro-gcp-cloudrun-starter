@@ -21,7 +21,7 @@ For the purposes of these Terms and Conditions:
 
 - **Country** refers to: California, United States
 
-- **Company** (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers to AstroWind LLC, 1 Cupertino, CA 95014.
+- **Company** (referred to as either "the Company", "We", "Us" or "Our" in this Agreement) refers to astro-gcp-cloudrun-starter (demo). Replace with your own entity and address.
 
 - **Device** means any device that can access the Service such as a computer, a cellphone or a digital tablet.
 
