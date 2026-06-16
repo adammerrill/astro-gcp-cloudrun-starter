@@ -15,14 +15,14 @@ GCP project IDs max out at 30 chars, so keep `PREFIX` ≤ ~20 chars.
 
 ## 0. Prerequisites
 
-| Requirement | Check |
-|-------------|-------|
-| `gcloud` CLI | `gcloud --version` |
-| Terraform ≥ 1.5 | `terraform --version` |
-| `git` + `gh` CLI | `git --version` && `gh --version` |
-| Docker (for local image build) | `docker --version` |
-| A GCP **billing account** (note its ID `XXXXXX-XXXXXX-XXXXXX`) | GCP Console → Billing |
-| Permission to create projects on that billing account | (Owner/Billing Admin) |
+| Requirement                                                    | Check                             |
+| -------------------------------------------------------------- | --------------------------------- |
+| `gcloud` CLI                                                   | `gcloud --version`                |
+| Terraform ≥ 1.5                                                | `terraform --version`             |
+| `git` + `gh` CLI                                               | `git --version` && `gh --version` |
+| Docker (for local image build)                                 | `docker --version`                |
+| A GCP **billing account** (note its ID `XXXXXX-XXXXXX-XXXXXX`) | GCP Console → Billing             |
+| Permission to create projects on that billing account          | (Owner/Billing Admin)             |
 
 > **New billing accounts have a project-creation quota.** The bootstrap creates
 > 4 projects (`shared`, `dev`, `staging`, `prod`). If you hit
@@ -103,19 +103,19 @@ Deploys are keyless (WIF) — **no GitHub Secrets are needed**. Set these as
 repository or `dev`-environment **Variables**. Three come from the shared
 outputs (step 3); the rest you already know.
 
-| Variable | Value |
-|----------|-------|
-| `WIF_PROVIDER` | shared output `wif_provider_name` |
-| `SA_DEPLOY` | shared output `deploy_service_account_email` |
-| `AR_REGION` | region, e.g. `us-central1` |
-| `SHARED_PROJECT` | `PREFIX-shared` |
-| `AR_REPO` | `website` |
-| `SERVICE_NAME` | `website` (MUST equal Terraform `service_name`) |
-| `REGION` | region, e.g. `us-central1` |
-| `PROJECT_ID` | `PREFIX-dev` |
-| `PROJECT_PREFIX` | `PREFIX` |
-| `TF_STATE_BUCKET` | `PREFIX-tf-state` |
-| `BILLING_ACCOUNT_ID` | `XXXXXX-XXXXXX-XXXXXX` |
+| Variable             | Value                                           |
+| -------------------- | ----------------------------------------------- |
+| `WIF_PROVIDER`       | shared output `wif_provider_name`               |
+| `SA_DEPLOY`          | shared output `deploy_service_account_email`    |
+| `AR_REGION`          | region, e.g. `us-central1`                      |
+| `SHARED_PROJECT`     | `PREFIX-shared`                                 |
+| `AR_REPO`            | `website`                                       |
+| `SERVICE_NAME`       | `website` (MUST equal Terraform `service_name`) |
+| `REGION`             | region, e.g. `us-central1`                      |
+| `PROJECT_ID`         | `PREFIX-dev`                                    |
+| `PROJECT_PREFIX`     | `PREFIX`                                        |
+| `TF_STATE_BUCKET`    | `PREFIX-tf-state`                               |
+| `BILLING_ACCOUNT_ID` | `XXXXXX-XXXXXX-XXXXXX`                          |
 
 ```bash
 # Example (repeat per variable); use --env dev to scope to the dev Environment:
