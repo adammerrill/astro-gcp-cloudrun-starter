@@ -1,0 +1,44 @@
+# Gitleaks configuration — astro-gcp-cloudrun-starter
+# Extends the built-in ruleset (150+ secret types) and tunes the allowlist so the
+# gate is trustworthy and not noisy. Noise — not detection — is what makes
+# scanners get ignored.
+
+title = "gitleaks config (astro-gcp-cloudrun-starter)"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Known-safe, non-secret values and generated/placeholder paths for this stack"
+
+# Paths that never contain real secrets (build output, deps, placeholders).
+paths = [
+  '''(^|/)dist/''',
+  '''(^|/)\.output/''',
+  '''(^|/)node_modules/''',
+  '''(^|/)\.astro/''',
+  '''package-lock\.json$''',
+  '''\.example$''',          # committed config templates — placeholders only
+  '''\.gitleaks\.toml$''',
+  '''SECURITY\.md$''',
+]
+
+# Values that match secret-shaped patterns but are publishable / non-sensitive
+# in this architecture. Documented so reviewers know WHY each is allowlisted.
+regexes = [
+  # Public GA4 Measurement ID — publishable by design (this stack uses GA4, NOT PostHog).
+  '''G-[A-Z0-9]{8,12}''',
+  # .example placeholders.
+  '''YOUR_[A-Z0-9_]+''',
+  '''PREFIX[-_a-z]*''',
+  '''XXXXXX-XXXXXX-XXXXXX''',
+  # Identity that is non-secret under keyless Workload Identity Federation:
+  # service-account emails and the WIF provider resource path appear in docs and
+  # are safe to expose (security comes from the repo-scoped attribute condition,
+  # not from hiding these strings).
+  '''sa-[a-z0-9-]+@[a-z0-9-]+\.iam\.gserviceaccount\.com''',
+  '''projects/[0-9]+/locations/global/workloadIdentityPools/[^"'' ]+''',
+  # Asset/CDN hosts that can trip generic high-entropy rules.
+  '''images\.unsplash\.com/[^"'' )]+''',
+  '''img\.shields\.io/[^"'' )]+''',
+]

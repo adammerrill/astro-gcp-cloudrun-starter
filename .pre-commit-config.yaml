@@ -1,0 +1,10 @@
+# Pre-commit hooks — blocks secrets BEFORE they enter a commit.
+# Setup (one time):  pipx install pre-commit && pre-commit install
+# (or: pip install pre-commit && pre-commit install)
+# The gitleaks hook runs `gitleaks protect --staged` against the staged diff
+# in milliseconds, using the repo's .gitleaks.toml allowlist.
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
+    hooks:
+      - id: gitleaks

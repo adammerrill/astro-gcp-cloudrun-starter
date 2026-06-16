@@ -1,0 +1,36 @@
+# Dependabot version updates — routine dependency bumps (complements the
+# security updates already enabled in repo settings).
+# Grouped to minimize PR noise. Docs: https://docs.github.com/code-security/dependabot
+version: 2
+updates:
+  # JavaScript / Astro dependencies (root package.json)
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      npm-minor-patch:
+        update-types:
+          - minor
+          - patch
+
+  # GitHub Actions used in .github/workflows/*
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  # Container base images in the root Dockerfile (node, nginx)
+  - package-ecosystem: docker
+    directory: "/"
+    schedule:
+      interval: weekly
+    groups:
+      docker:
+        patterns:
+          - "*"
