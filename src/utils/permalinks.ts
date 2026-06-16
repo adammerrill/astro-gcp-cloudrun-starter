@@ -43,16 +43,19 @@ export const getPermalink = (slug = '', type = 'page'): string => {
   let permalink: string;
 
   // Detect already-absolute/special links so we don't prepend the base path.
-  // Scheme checks are case-insensitive: schemes are case-insensitive per the URL
-  // spec, so a case-sensitive check (e.g. only "javascript:") is bypassable
-  // (CodeQL js/incomplete-url-scheme-check).
+  // Scheme checks are case-insensitive (URL schemes are case-insensitive per
+  // spec) and cover every script-capable pseudo-scheme — javascript:, data:,
+  // vbscript: — so the check can't be bypassed (CodeQL
+  // js/incomplete-url-scheme-check).
   const lowerSlug = slug.toLowerCase();
   if (
     lowerSlug.startsWith('https://') ||
     lowerSlug.startsWith('http://') ||
     slug.startsWith('://') ||
     slug.startsWith('#') ||
-    lowerSlug.startsWith('javascript:')
+    lowerSlug.startsWith('javascript:') ||
+    lowerSlug.startsWith('data:') ||
+    lowerSlug.startsWith('vbscript:')
   ) {
     return slug;
   }
