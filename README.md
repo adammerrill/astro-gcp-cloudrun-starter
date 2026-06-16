@@ -1,315 +1,87 @@
-# 🚀 astro-gcp-cloudrun-starter + GCP Cloud Run Starter Template
+# astro-gcp-cloudrun-starter
 
-<img src="https://raw.githubusercontent.com/arthelokyo/.github/main/resources/astrowind/lighthouse-score.png" align="right"
-     alt="astro-gcp-cloudrun-starter Lighthouse Score" width="100" height="358">
+**astro-gcp-cloudrun-starter is a production-ready, open-source (MIT) GitHub template that deploys an [Astro](https://astro.build/) v6 + [Tailwind CSS](https://tailwindcss.com/) v4 website to [Google Cloud Run](https://cloud.google.com/run) using keyless Workload Identity Federation, Terraform-managed infrastructure, and a scale-to-zero cost profile of roughly $0/month.**
 
-🌟 _Most *starred* & *forked* Astro theme in 2022, 2023, 2024 & 2025_. 🌟
+It exists so any developer can branch it (or use it as a GitHub Template) and stand up a containerized web app on GCP with a **zero-secrets-in-git** foundation: no service-account keys anywhere, identity is keyless, and only placeholder `.example` files are committed to the public repo.
 
-**astro-gcp-cloudrun-starter + GCP Cloud Run Starter Template** is a production-ready repository that serves as a reusable GCP Cloud Run web-app starter template. It allows any developer to branch or use this repository as a GitHub Template to stand up any type of containerized web application on Google Cloud Run with a secure, zero-secrets-in-git foundation.
+[![License: MIT](https://img.shields.io/github/license/adammerrill/astro-gcp-cloudrun-starter?style=flat-square)](./LICENSE.md)
+[![Stars](https://img.shields.io/github/stars/adammerrill/astro-gcp-cloudrun-starter?style=flat-square)](https://github.com/adammerrill/astro-gcp-cloudrun-starter/stargazers)
+[![Forks](https://img.shields.io/github/forks/adammerrill/astro-gcp-cloudrun-starter?style=flat-square)](https://github.com/adammerrill/astro-gcp-cloudrun-starter/network/members)
 
-For setting up and deploying the infrastructure, see our guides:
+> **Demo:** the live example is deployed to Google Cloud Run from this repo. See [the deploy workflow](.github/workflows/deploy-dev.yml) and the [Fresh User Walkthrough](./docs/FRESH_USER_WALKTHROUGH.md) to stand up your own.
 
-- [Template Quickstart](./docs/TEMPLATE_SETUP.md) — How to use this repository as a starter template.
-- [Setup Playbook](./docs/SETUP_PLAYBOOK.md) — Step-by-step instructions for initial manual bootstrap and Terraform backend migration.
-- [IaC Governance Rules](./docs/IAC_RULES.md) — The 9 developer rules for managing infrastructure changes.
+---
 
-- ✅ **Production-ready** scores in **PageSpeed Insights** reports.
-- ✅ Integration with **Tailwind CSS v4** supporting **Dark mode** and **_RTL_**.
-- ✅ **Fast and SEO friendly blog** with automatic **RSS feed**, **MDX** support, **Categories & Tags**, **Social Share**, ...
-- ✅ **Image Optimization** (using new **Astro Assets** and **Unpic** for Universal image CDN).
-- ✅ Generation of **project sitemap** based on your routes.
-- ✅ **Open Graph tags** for social media sharing.
-- ✅ **Analytics** built-in Google Analytics, and Splitbee integration.
+## Why this template
 
-<br>
+| Pillar                     | What you get                                                                                                                                                        |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Keyless security**       | GitHub Actions → GCP via Workload Identity Federation (OIDC), scoped to **this exact repository**. No JSON keys to leak.                                            |
+| **Infrastructure as code** | Terraform layers (bootstrap → shared → environment) provision projects, Artifact Registry, Cloud Run, IAM, monitoring, logging, and a billing budget. State in GCS. |
+| **Scale-to-zero cost**     | `min-instances = 0`, a low max cap, smallest sensible CPU/memory, and a billing budget with alerts → ≈ **$0/month** within the free tier (estimate).                |
+| **Fast & findable**        | Core Web Vitals enforced in CI (Lighthouse budget); schema.org JSON-LD + `llms.txt` so AI search engines can cite the site.                                         |
+| **Accessible**             | WCAG 2.2 AA contrast (both themes), `prefers-reduced-motion`, skip link, semantic landmarks, labeled forms.                                                         |
+| **Measured**               | Privacy-first GA4 + Consent Mode v2 conversion tracking (off until you set a Measurement ID).                                                                       |
 
-![astro-gcp-cloudrun-starter Theme Screenshot](https://raw.githubusercontent.com/arthelokyo/.github/main/resources/astrowind/screenshot-astrowind-readme-fina-v1.png)
+## Quickstart
 
-[![arthelokyo](https://custom-icon-badges.demolab.com/badge/made%20by%20-arthelokyo-556bf2?style=flat-square&logo=arthelokyo&logoColor=white&labelColor=101827)](https://github.com/arthelokyo)
-[![License](https://img.shields.io/github/license/adammerrill/astro-gcp-cloudrun-starter?style=flat-square&color=dddddd&labelColor=000000)](https://github.com/adammerrill/astro-gcp-cloudrun-starter/blob/main/LICENSE.md)
-[![Maintained](https://img.shields.io/badge/maintained%3F-yes-brightgreen.svg?style=flat-square)](https://github.com/arthelokyo)
-[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square)](https://github.com/adammerrill/astro-gcp-cloudrun-starter#contributing)
-[![Known Vulnerabilities](https://snyk.io/test/github/adammerrill/astro-gcp-cloudrun-starter/badge.svg?style=flat-square)](https://snyk.io/test/github/adammerrill/astro-gcp-cloudrun-starter)
-[![Stars](https://img.shields.io/github/stars/adammerrill/astro-gcp-cloudrun-starter.svg?style=social&label=stars&maxAge=86400&color=ff69b4)](https://github.com/adammerrill/astro-gcp-cloudrun-starter)
-[![Forks](https://img.shields.io/github/forks/adammerrill/astro-gcp-cloudrun-starter.svg?style=social&label=forks&maxAge=86400&color=ff69b4)](https://github.com/adammerrill/astro-gcp-cloudrun-starter)
+1. **Use this template** on GitHub (or clone it).
+2. Follow the **[Fresh User Walkthrough](./docs/FRESH_USER_WALKTHROUGH.md)** — the single authoritative path from a clean GCP account to a live, public Cloud Run URL (~30–45 min).
+3. To run the site locally: `npm install && npm run dev` (→ `localhost:4321`).
 
-<br>
+> **Requires Node.js ≥ 22.12.0.** The site is `output: 'static'`; the root `Dockerfile` builds it and serves it with nginx on **port 8080**.
 
-<details open>
-<summary>Table of Contents</summary>
+## Documentation
 
-- [Demo](#demo)
-- [Upcoming: astro-gcp-cloudrun-starter 2.0 – We Need Your Vision!](#-upcoming-astrowind-20--we-need-your-vision)
-- [TL;DR](#tldr)
-- [Getting started](#getting-started)
-  - [Project structure](#project-structure)
-  - [Commands](#commands)
-  - [Configuration](#configuration)
-  - [Deploy](#deploy)
-- [Frequently Asked Questions](#frequently-asked-questions)
-- [Contributing](#contributing)
-- [Acknowledgements](#acknowledgements)
-- [License](#license)
+### Deploy & infrastructure
 
-</details>
+- **[Fresh User Walkthrough](./docs/FRESH_USER_WALKTHROUGH.md)** — zero to a live URL, in order.
+- **[Setup Playbook](./docs/SETUP_PLAYBOOK.md)** — bootstrap + Terraform detail and state migration.
+- **[Template Quickstart](./docs/TEMPLATE_SETUP.md)** — using this repo as a template; build/CI overview.
+- **[IaC Governance Rules](./docs/IAC_RULES.md)** — the 9 rules that keep the infrastructure reproducible.
+- **[Gap Register](./docs/GAP_REGISTER.md)** — the repo-vs-reality audit that hardened the deploy path.
 
-<br>
+### Web optimization (the 5-phase program)
 
-## Demo
+- **[Performance & Crawler Access](./docs/PERFORMANCE_AND_CRAWLING.md)** — Core Web Vitals, Lighthouse CI budget, AI-crawler policy.
+- **[GEO & Structured Data](./docs/GEO_STRUCTURED_DATA.md)** — schema.org JSON-LD, definition-first content, `llms.txt`.
+- **[Styling & Accessibility](./docs/STYLING_ACCESSIBILITY.md)** — WCAG 2.2 AA contrast, reduced motion.
+- **[Component Accessibility](./docs/COMPONENT_ACCESSIBILITY.md)** — semantics, skip link, keyboard a11y, minimal hydration.
+- **[Conversion & Measurement](./docs/CONVERSION_MEASUREMENT.md)** — GA4 + Consent Mode v2, conversion events, AI-referral tracking.
 
-📌 [https://github.com/adammerrill/astro-gcp-cloudrun-starter/](https://github.com/adammerrill/astro-gcp-cloudrun-starter/)
-
-<br>
-
-## 🔔 Upcoming: astro-gcp-cloudrun-starter 2.0 – We Need Your Vision!
-
-We're gearing up for **astro-gcp-cloudrun-starter 2.0**, and we want it to be shaped by you, our community. Join the discussion and share your ideas, suggestions, and feedback to help us make astro-gcp-cloudrun-starter even better.
-
-[Share Your Feedback in Our Discussion!](https://github.com/adammerrill/astro-gcp-cloudrun-starter/discussions/392)
-
-<br>
-
-## TL;DR
-
-```shell
-npm create astro@latest -- --template adammerrill/astro-gcp-cloudrun-starter
-```
-
-## Getting started
-
-**astro-gcp-cloudrun-starter** tries to give you quick access to creating a website using [Astro v6](https://astro.build/) + [Tailwind CSS v4](https://tailwindcss.com/). It's a free theme which focuses on simplicity, good practices and high performance.
-
-Very little vanilla javascript is used only to provide basic functionality so that each developer decides which framework (React, Vue, Svelte, Solid JS...) to use and how to approach their goals.
-
-> **Note:** Requires **Node.js >= 22.12.0**. The template currently uses `output: 'static'`, but the blog only works with `prerender = true`.
-
-### Project structure
-
-Inside **astro-gcp-cloudrun-starter** template, you'll see the following folders and files:
+## Project structure
 
 ```
-/
-├── public/
-│   ├── _headers
-│   └── robots.txt
-├── src/
-│   ├── assets/
-│   │   ├── favicons/
-│   │   ├── images/
-│   │   └── styles/
-│   │       └── tailwind.css
-│   ├── components/
-│   │   ├── blog/
-│   │   ├── common/
-│   │   ├── ui/
-│   │   ├── widgets/
-│   │   │   ├── Header.astro
-│   │   │   └── ...
-│   │   ├── CustomStyles.astro
-│   │   ├── Favicons.astro
-│   │   └── Logo.astro
-│   ├── content.config.ts
-│   ├── data/
-│   │   └── post/
-│   │       ├── post-slug-1.md
-│   │       ├── post-slug-2.mdx
-│   │       └── ...
-│   ├── layouts/
-│   │   ├── Layout.astro
-│   │   ├── MarkdownLayout.astro
-│   │   └── PageLayout.astro
-│   ├── pages/
-│   │   ├── [...blog]/
-│   │   │   ├── [category]/
-│   │   │   ├── [tag]/
-│   │   │   ├── [...page].astro
-│   │   │   └── index.astro
-│   │   ├── index.astro
-│   │   ├── 404.astro
-│   │   ├-- rss.xml.ts
-│   │   └── ...
-│   ├── utils/
-│   ├── config.yaml
-│   └── navigation.js
-├── package.json
-├── astro.config.ts
-└── ...
+src/                      # Astro v6 site: pages, components, content, config.yaml
+  components/common/      # Metadata, Analytics (GA4 + Consent Mode v2), StructuredData
+  utils/schema.ts         # config-driven schema.org JSON-LD builders
+Dockerfile                # multi-stage: Node 22 build → nginx:8080 (~25MB, non-root)
+public/                   # robots.txt (AI-crawler policy), llms.txt, static assets
+.github/workflows/        # ci.yml (check + docker + terraform-validate + lighthouse),
+                          # deploy-dev/staging/prod (keyless, app-deploy-only)
+terraform/                # bootstrap, environments (shared/dev/staging/production), modules
+docs/                     # all guides (indexed above)
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Commands
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+| Command           | Action                          |
+| :---------------- | :------------------------------ |
+| `npm install`     | Install dependencies            |
+| `npm run dev`     | Dev server at `localhost:4321`  |
+| `npm run build`   | Production build to `./dist/`   |
+| `npm run preview` | Preview the build locally       |
+| `npm run check`   | astro check + ESLint + Prettier |
+| `npm run fix`     | Auto-fix ESLint + Prettier      |
 
-Any static assets, like images, can be placed in the `public/` directory if they do not require any transformation or in the `assets/` directory if they are imported directly.
+## Configuration
 
-[![Edit astro-gcp-cloudrun-starter on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://githubbox.com/adammerrill/astro-gcp-cloudrun-starter/tree/main) [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/adammerrill/astro-gcp-cloudrun-starter)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file `README.md`. Update `src/config.yaml` and contents. Have fun!
-
-<br>
-
-### Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command             | Action                                             |
-| :------------------ | :------------------------------------------------- |
-| `npm install`       | Installs dependencies                              |
-| `npm run dev`       | Starts local dev server at `localhost:4321`        |
-| `npm run build`     | Build your production site to `./dist/`            |
-| `npm run preview`   | Preview your build locally, before deploying       |
-| `npm run check`     | Check your project for errors                      |
-| `npm run fix`       | Run Eslint and format codes with Prettier          |
-| `npm run astro ...` | Run CLI commands like `astro add`, `astro preview` |
-
-<br>
-
-### Configuration
-
-Basic configuration file: `./src/config.yaml`
-
-```yaml
-site:
-  name: 'Example'
-  site: 'https://example.com'
-  base: '/' # Change this if you need to deploy to Github Pages, for example
-  trailingSlash: false # Generate permalinks with or without "/" at the end
-
-  googleSiteVerificationId: false # Or some value,
-
-# Default SEO metadata
-metadata:
-  title:
-    default: 'Example'
-    template: '%s — Example'
-  description: 'This is the default meta description of Example website'
-  robots:
-    index: true
-    follow: true
-  openGraph:
-    site_name: 'Example'
-    images:
-      - url: '~/assets/images/default.png'
-        width: 1200
-        height: 628
-    type: website
-  twitter:
-    handle: '@twitter_user'
-    site: '@twitter_user'
-    cardType: summary_large_image
-
-i18n:
-  language: en
-  textDirection: ltr
-
-apps:
-  blog:
-    isEnabled: true # If the blog will be enabled
-    postsPerPage: 6 # Number of posts per page
-
-    post:
-      isEnabled: true
-      permalink: '/blog/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
-      robots:
-        index: true
-
-    list:
-      isEnabled: true
-      pathname: 'blog' # Blog main path, you can change this to "articles" (/articles)
-      robots:
-        index: true
-
-    category:
-      isEnabled: true
-      pathname: 'category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
-      robots:
-        index: true
-
-    tag:
-      isEnabled: true
-      pathname: 'tag' # Tag main path /tag/some-tag, you can change this to "topics" (/topics/some-category)
-      robots:
-        index: false
-
-    isRelatedPostsEnabled: true # If a widget with related posts is to be displayed below each post
-    relatedPostsCount: 4 # Number of related posts to display
-
-analytics:
-  vendors:
-    googleAnalytics:
-      id: null # or "G-XXXXXXXXXX"
-
-ui:
-  theme: 'system' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"
-```
-
-<br>
-
-#### Customize Design
-
-With Tailwind CSS v4, all configuration is CSS-first. To customize Font families, Colors or more Elements refer to the following files:
-
-- `src/components/CustomStyles.astro` — CSS variables for colors and fonts
-- `src/assets/styles/tailwind.css` — Tailwind theme tokens (`@theme`), custom utilities (`@utility`), and plugins
-
-### Deploy
-
-#### Deploy to production (manual)
-
-You can create an optimized production build with:
-
-```shell
-npm run build
-```
-
-Now, your website is ready to be deployed. All generated files are located at
-`dist` folder, which you can deploy the folder to any hosting service you
-prefer.
-
-#### Deploy to Netlify
-
-Clone this repository on your own GitHub account and deploy it to Netlify:
-
-[![Netlify Deploy button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/adammerrill/astro-gcp-cloudrun-starter)
-
-#### Deploy to Vercel
-
-Clone this repository on your own GitHub account and deploy to Vercel:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Farthelokyo%2Fastrowind)
-
-#### Deploy to PandaStack
-
-Clone this repository on your own GitHub account and deploy to PandaStack:
-
-[![Deploy to PandaStack](https://dashboard.pandastack.io/deploy-button.svg)](https://dashboard.pandastack.io/deploy?repo=adammerrill/astro-gcp-cloudrun-starter&type=static&buildCmd=npm+run+build&outputDir=dist)
-
-#### Deploy to Google Cloud Platform (GCP)
-
-For deploying to Google Cloud Platform with Terraform-managed infrastructure (Cloud Run, WIF, VPC, GCS, IAM, etc.), see the following guides:
-
-- [Setup Playbook](./docs/SETUP_PLAYBOOK.md) — Step-by-step instructions for initial manual bootstrap and Terraform backend migration.
-- [IaC Governance Rules](./docs/IAC_RULES.md) — The 9 developer rules for managing infrastructure changes.
-
-<br>
-
-## Frequently Asked Questions
-
-- Why?
--
--
-
-<br>
+Site content/SEO is in `src/config.yaml` (site name, metadata, analytics). Set your own **Cloud Run / custom domain** as `site:` and, to enable analytics, your GA4 **Measurement ID** under `analytics.vendors.googleAnalytics.id`.
 
 ## Contributing
 
-If you have any ideas, suggestions or find any bugs, feel free to open a discussion, an issue or create a pull request.
-That would be very useful for all of us and we would be happy to listen and take action.
-
-## Acknowledgements
-
-Initially created by **Arthelokyo** and maintained by a community of [contributors](https://github.com/adammerrill/astro-gcp-cloudrun-starter/graphs/contributors).
+Issues, discussions, and PRs are welcome. Infrastructure changes follow the [IaC Governance Rules](./docs/IAC_RULES.md): edit Terraform, open a PR, never click-ops in the console.
 
 ## License
 
-**astro-gcp-cloudrun-starter** is licensed under the MIT license — see the [LICENSE](./LICENSE.md) file for details.
+MIT — see [LICENSE.md](./LICENSE.md). Originally derived from the AstroWind theme by Arthelokyo; reworked into a GCP Cloud Run starter.
