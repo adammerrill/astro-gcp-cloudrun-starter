@@ -8,7 +8,7 @@ tags:
   - tailwind css
   - theme
 metadata:
-  canonical: https://github.com/adammerrill/astro-gcp-cloudrun-starter/how-to-customize-astrowind-to-your-brand
+  canonical: https://github.com/adammerrill/astro-gcp-cloudrun-starter
 ---
 
 ## Congue justo vulputate nascetur convallis varius orci fringilla nulla pharetr
