@@ -1,11 +1,23 @@
 # environments/shared/terraform.tfvars.example
 # Copy this file to "terraform.tfvars" and fill in your values.
+# The shared layer creates the WIF pool/provider, the GitHub deploy SA, and
+# the Artifact Registry. Run it AFTER the bootstrap module.
 
 # GCP Billing Account ID (format: XXXXXX-XXXXXX-XXXXXX)
 billing_account_id = "YOUR_BILLING_ACCOUNT_ID"
 
 # Naming prefix for your projects and GCS state bucket (e.g. "mycompany")
 project_prefix = "YOUR_PROJECT_PREFIX"
+
+# The shared project ID (created by the bootstrap module as PREFIX-shared)
+project_id = "YOUR_PROJECT_PREFIX-shared"
+
+# Display name for the shared project
+project_name = "YOUR_PROJECT_PREFIX Shared"
+
+# The bootstrap module already created this project, so Terraform must ADOPT
+# it (look it up), not create it. Leave this false.
+create_project = false
 
 # Primary region for shared resources
 region = "us-central1"

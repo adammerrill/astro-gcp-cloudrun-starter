@@ -1,14 +1,22 @@
 # environments/dev/terraform.tfvars.example
 # Copy this file to "terraform.tfvars" and fill in your values.
+# Run this layer AFTER bootstrap and shared.
 
 # GCP Billing Account ID (format: XXXXXX-XXXXXX-XXXXXX)
 billing_account_id = "YOUR_BILLING_ACCOUNT_ID"
 
-# The target GCP project ID for your Dev environment (e.g., "mycompany-dev")
+# The Dev project ID (created by the bootstrap module as PREFIX-dev)
 project_id = "YOUR_PROJECT_PREFIX-dev"
 
-# Naming prefix for your projects and GCS state bucket (e.g., "mycompany")
+# Display name for the Dev project
+project_name = "YOUR_PROJECT_PREFIX Dev"
+
+# Naming prefix for your projects and GCS state bucket (e.g. "mycompany")
 project_prefix = "YOUR_PROJECT_PREFIX"
+
+# The bootstrap module already created this project, so Terraform must ADOPT
+# it (look it up), not create it. Leave this false.
+create_project = false
 
 # Primary region for resources
 region = "us-central1"
@@ -25,10 +33,15 @@ shared_project_id = "YOUR_PROJECT_PREFIX-shared"
 # Service account to impersonate (created by the bootstrap module)
 terraform_service_account = "sa-terraform-admin@YOUR_PROJECT_PREFIX-shared.iam.gserviceaccount.com"
 
-# Cost ceiling
+# Cloud Run service name.
+# IMPORTANT: this MUST equal the SERVICE_NAME GitHub Actions variable, or CI
+# will deploy revisions to a different service than Terraform created.
+service_name = "website"
+
+# Cost ceiling (USD/month) — drives the billing budget + 50/80/100% alerts
 monthly_budget_usd = 5
 
-# Cloud Run limits
+# Cloud Run limits (cost-optimized defaults: scales to zero, small, capped)
 cloud_run_min_instances = 0
 cloud_run_max_instances = 2
 cloud_run_cpu_limit     = "0.5"
