@@ -1,21 +1,85 @@
 ---
+/**
+ * Privacy-first Google Analytics 4 (GA4) with Consent Mode v2.
+ *
+ * - OFF unless `analytics.vendors.googleAnalytics.id` is set in src/config.yaml
+ *   (use a real "G-XXXXXXXXXX" Measurement ID; the committed value stays null).
+ * - Consent Mode v2: analytics/ad storage default to "denied", so GA runs in
+ *   privacy-preserving (cookieless) mode until a consent UI grants it. This is
+ *   the 2026 EEA-compliant default. To let visitors opt in, add a consent
+ *   banner/CMP that calls: gtag('consent','update',{analytics_storage:'granted'}).
+ *   Ref: developers.google.com/tag-platform/security/guides/consent
+ * - Tracks conversion events (no PII): cta_use_template, outbound_click,
+ *   scroll_depth, form_submit. See docs/CONVERSION_MEASUREMENT.md.
+ */
 import { ANALYTICS } from 'astrowind:config';
 
 const id = ANALYTICS?.vendors?.googleAnalytics?.id ? String(ANALYTICS.vendors.googleAnalytics.id) : '';
 const partytown = !!ANALYTICS?.vendors?.googleAnalytics?.partytown;
 const scriptType = partytown ? 'text/partytown' : undefined;
+const repo = 'github.com/adammerrill/astro-gcp-cloudrun-starter';
 ---
 
-{id && <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${id}`} type={scriptType} />}
+<script is:inline id="aw-ga" data-id={id} data-repo={repo}>
+  (function () {
+    var el = document.getElementById('aw-ga');
+    var gaId = el.dataset.id;
+    var gaRepo = el.dataset.repo;
+    if (!gaId) return;
 
-<script is:inline id="ga-init" data-id={id} type={id ? scriptType : undefined}>
-  if (document.getElementById('ga-init').dataset.id) {
-    var d = document.getElementById('ga-init').dataset.id;
     window.dataLayer = window.dataLayer || [];
     window.gtag = function () {
-      dataLayer.push(arguments);
+      window.dataLayer.push(arguments);
     };
+
+    // Consent Mode v2: deny storage by default (privacy-first).
+    window.gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500,
+    });
+    try {
+      if (localStorage.getItem('aw-consent') === 'granted') {
+        window.gtag('consent', 'update', { analytics_storage: 'granted' });
+      }
+    } catch (err) {
+      void err;
+    }
+
     window.gtag('js', new Date());
-    window.gtag('config', d);
-  }
+    window.gtag('config', gaId, { anonymize_ip: true });
+
+    // Conversion events (no PII). Storage governed by consent above.
+    function track(name, params) {
+      window.gtag('event', name, params || {});
+    }
+    document.addEventListener('click', function (e) {
+      var a = e.target && e.target.closest ? e.target.closest('a') : null;
+      if (!a || !a.href) return;
+      if (a.href.indexOf(gaRepo) !== -1) track('cta_use_template', { link_url: a.href });
+      else if (a.host && a.host !== location.host) track('outbound_click', { link_url: a.href });
+    });
+    document.addEventListener('submit', function (e) {
+      track('form_submit', { form_id: (e.target && e.target.id) || 'unknown' });
+    });
+    var hit = {};
+    window.addEventListener(
+      'scroll',
+      function () {
+        var h = document.documentElement;
+        var pct = ((h.scrollTop + window.innerHeight) / h.scrollHeight) * 100;
+        [25, 50, 75, 100].forEach(function (t) {
+          if (pct >= t && !hit[t]) {
+            hit[t] = 1;
+            track('scroll_depth', { percent: t });
+          }
+        });
+      },
+      { passive: true }
+    );
+  })();
 </script>
+
+{id && <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${id}`} type={scriptType} />}
