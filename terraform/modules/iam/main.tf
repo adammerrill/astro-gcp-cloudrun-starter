@@ -33,6 +33,20 @@ resource "google_project_iam_member" "cloudrun_ar_reader" {
   member  = "serviceAccount:${google_service_account.cloudrun.email}"
 }
 
+# Cloud Run's per-project Service Agent — not the runtime SA — is the identity
+# that actually pulls the image at deploy time. When the image lives in a
+# different project (shared AR), that agent needs reader on the shared project.
+data "google_project" "this" {
+  project_id = var.project_id
+}
+
+resource "google_project_iam_member" "cloudrun_agent_ar_reader" {
+  count   = var.shared_project_id != "" ? 1 : 0
+  project = var.shared_project_id
+  role    = "roles/artifactregistry.reader"
+  member  = "serviceAccount:service-${data.google_project.this.number}@serverless-robot-prod.iam.gserviceaccount.com"
+}
+
 # ─── Workload Identity Federation (shared project only) ───
 resource "google_iam_workload_identity_pool" "github" {
   count = var.create_wif ? 1 : 0
