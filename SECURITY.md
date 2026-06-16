@@ -10,11 +10,11 @@ a different point and they complement rather than replace each other.
 
 ## The three layers
 
-| Layer         | Tool                                         | Gate                   | What it does                                                                                                                                    |
-| ------------- | -------------------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1. Pre-commit | **Gitleaks**                                 | before a commit exists | Sub-second scan of the staged diff; blocks the commit locally.                                                                                  |
-| 2. CI         | **Gitleaks + TruffleHog**                    | every PR & push        | Gitleaks (fast, SARIF → Security tab) + TruffleHog **credential verification** (fails the build on a _live_ secret). Weekly full-history sweep. |
-| 3. Platform   | **GitHub Secret Scanning + Push Protection** | at `git push`          | GitHub-native backstop that blocks known secret patterns even if layers 1–2 were skipped.                                                       |
+| Layer         | Tool                                                                                     | Gate                         | What it does                                                                                                                                    |
+| ------------- | ---------------------------------------------------------------------------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1. Pre-commit | **Gitleaks**                                                                             | before a commit exists       | Sub-second scan of the staged diff; blocks the commit locally.                                                                                  |
+| 2. CI         | **Gitleaks + TruffleHog**                                                                | every PR & push              | Gitleaks (fast, SARIF → Security tab) + TruffleHog **credential verification** (fails the build on a _live_ secret). Weekly full-history sweep. |
+| 3. Platform   | **GitHub Advanced Security** (Secret Protection · Push Protection · CodeQL · Dependabot) | at `git push` & continuously | GitHub-native backstop: blocks known secret patterns at push even if layers 1–2 were skipped, plus continuous secret/code/dependency scanning.  |
 
 ## Layer 1 — install the pre-commit hook (one step)
 
@@ -50,15 +50,42 @@ weekly:
   on only after a full local scan confirmed zero pre-existing findings — see
   "Baseline" below.)
 
-## Layer 3 — enable the GitHub-native backstop (repo Settings — do this once)
+## Layer 3 — GitHub-native backstop (✅ ENABLED)
 
-These are GitHub UI settings, not code. As a repo admin:
+GitHub Advanced Security is configured on this repo (**Settings → Advanced
+Security**). Current state:
 
-1. **Settings → Code security and analysis**
-2. **Secret scanning** → **Enable** (free for public repos).
-3. **Push protection** → **Enable** — blocks known secret patterns at `git push`
-   time, the last line of defense if local hooks were bypassed.
-4. **Dependabot alerts** → **Enable** (adjacent supply-chain hygiene).
+**Secret protection**
+
+- ✅ **Secret Protection** (secret scanning) — GitHub continuously scans the
+  public repo and alerts partners on detected secrets.
+- ✅ **Push protection** — blocks commits containing supported secret patterns at
+  `git push` time; the last line of defense if local hooks were bypassed.
+
+**Code scanning (SAST — complements secret scanning)**
+
+- ✅ **CodeQL analysis** — detects code vulnerabilities/errors (a full scan runs
+  on enablement). Findings appear under **Security → Code scanning**, alongside
+  the Gitleaks SARIF from Layer 2.
+- ✅ **Copilot Autofix** — AI-suggested fixes for CodeQL alerts.
+- Check-runs failure threshold: Security = **High or higher**, Standard = **Only
+  errors**. To _block merges_ on these alerts, create a branch ruleset
+  (**Settings → Rules**) that requires the code-scanning check.
+
+**Supply chain (Dependabot)**
+
+- ✅ Dependency graph · ✅ Dependabot **alerts** (1 rule) · ✅ **malware alerts** ·
+  ✅ **security updates** · ✅ **grouped security updates**.
+- ⬜ Dependabot **version updates** — not yet enabled; requires a
+  `.github/dependabot.yml` config (optional follow-up).
+- ⬜ Automatic dependency submission — off (not needed for this stack).
+
+**Reporting**
+
+- ✅ **Private vulnerability reporting** — researchers can report privately
+  (**Security → Advisories**); see "Reporting a vulnerability" below.
+
+> To review or change any of these: **Settings → Advanced Security**.
 
 ## Allowlist rationale (why the gate isn't noisy)
 
