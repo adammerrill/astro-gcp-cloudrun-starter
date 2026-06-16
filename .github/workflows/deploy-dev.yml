@@ -36,10 +36,21 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Apply
+        env:
+          TF_VAR_project_id: ${{ vars.PROJECT_ID }}
+          TF_VAR_project_prefix: ${{ vars.PROJECT_PREFIX }}
+          TF_VAR_shared_project_id: ${{ vars.SHARED_PROJECT }}
+          TF_VAR_service_name: ${{ vars.SERVICE_NAME }}
+          TF_VAR_region: ${{ vars.REGION }}
+          TF_VAR_create_project: "false"
+          TF_VAR_billing_account_id: ${{ vars.BILLING_ACCOUNT_ID }}
         run: |
           cd terraform/environments/dev
-          terraform init
-          terraform apply -auto-approve -var="image=${{ vars.AR_REGION }}-docker.pkg.dev/${{ vars.SHARED_PROJECT }}/${{ vars.AR_REPO }}/website:${{ github.sha }}"
+          terraform init \
+            -backend-config="bucket=${{ vars.TF_STATE_BUCKET }}" \
+            -backend-config="prefix=dev"
+          terraform apply -auto-approve \
+            -var="image=${{ vars.AR_REGION }}-docker.pkg.dev/${{ vars.SHARED_PROJECT }}/${{ vars.AR_REPO }}/website:${{ github.sha }}"
 
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2

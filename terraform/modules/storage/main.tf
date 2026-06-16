@@ -1,6 +1,7 @@
 # modules/storage — GCS buckets for TF state, backups, and DR
 
 resource "google_storage_bucket" "tf_state" {
+  count    = var.create_state_bucket ? 1 : 0
   name     = "${var.project_prefix}-tf-state"
   location = var.primary_region
   project  = var.project_id
@@ -24,6 +25,7 @@ resource "google_storage_bucket" "tf_state" {
 
 # DR state bucket in secondary region
 resource "google_storage_bucket" "tf_state_dr" {
+  count    = var.create_state_bucket ? 1 : 0
   name     = "${var.project_prefix}-tf-state-dr"
   location = var.dr_region
   project  = var.project_id

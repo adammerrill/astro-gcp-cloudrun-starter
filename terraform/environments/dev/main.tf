@@ -33,6 +33,7 @@ module "storage" {
   environment              = var.environment
   primary_region           = var.region
   dr_region                = var.dr_region
+  create_state_bucket      = false
   create_audit_bucket      = true
   audit_log_retention_days = var.audit_log_retention_days
 
