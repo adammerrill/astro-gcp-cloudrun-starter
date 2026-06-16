@@ -36,14 +36,9 @@ jobs:
           region: ${{ vars.REGION }}
           project_id: ${{ vars.PROJECT_ID }}
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: Terraform Apply
-        run: |
-          cd terraform/environments/production
-          terraform init
-          terraform apply -auto-approve -var="image=${{ vars.AR_REGION }}-docker.pkg.dev/${{ vars.SHARED_PROJECT }}/${{ vars.AR_REPO }}/website:${{ github.ref_name }}"
+      # Infrastructure is owned by Terraform, run deliberately from a controlled
+      # environment — NOT from this pipeline. CI only ships a new image to the
+      # existing service, keeping the deploy identity least-privilege.
 
       - name: Smoke Test
         run: |
