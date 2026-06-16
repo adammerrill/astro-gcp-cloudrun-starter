@@ -42,12 +42,20 @@ export const getCanonical = (path = ''): string | URL => {
 export const getPermalink = (slug = '', type = 'page'): string => {
   let permalink: string;
 
+  // Detect already-absolute/special links so we don't prepend the base path.
+  // Scheme checks are case-insensitive (URL schemes are case-insensitive per
+  // spec) and cover every script-capable pseudo-scheme — javascript:, data:,
+  // vbscript: — so the check can't be bypassed (CodeQL
+  // js/incomplete-url-scheme-check).
+  const lowerSlug = slug.toLowerCase();
   if (
-    slug.startsWith('https://') ||
-    slug.startsWith('http://') ||
+    lowerSlug.startsWith('https://') ||
+    lowerSlug.startsWith('http://') ||
     slug.startsWith('://') ||
     slug.startsWith('#') ||
-    slug.startsWith('javascript:')
+    lowerSlug.startsWith('javascript:') ||
+    lowerSlug.startsWith('data:') ||
+    lowerSlug.startsWith('vbscript:')
   ) {
     return slug;
   }

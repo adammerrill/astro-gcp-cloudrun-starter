@@ -4,6 +4,12 @@ on:
   pull_request:
     branches: [main]
 
+# Least-privilege default for GITHUB_TOKEN. These jobs only read the repo
+# (checkout, build, validate); none need write scopes. Override per-job if that
+# ever changes.
+permissions:
+  contents: read
+
 jobs:
   lint-and-check:
     runs-on: ubuntu-latest
