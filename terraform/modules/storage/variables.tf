@@ -22,6 +22,12 @@ variable "dr_region" {
   default = "us-east1"
 }
 
+variable "create_state_bucket" {
+  type        = bool
+  default     = true
+  description = "Create the TF state and DR buckets. Set false in env layers when bootstrap already owns them."
+}
+
 variable "create_audit_bucket" {
   type    = bool
   default = true
