@@ -4,7 +4,7 @@
 
 **astro-gcp-cloudrun-starter** is a production-ready, open-source GitHub template that deploys an **Astro v6 + Tailwind CSS v4** static site to **Google Cloud Run** with a zero-secrets, keyless, Terraform-managed foundation. The front end is derived from the AstroWind theme; the project adds a complete GCP/IaC/CI layer and a 5-phase web-optimization pass (performance, GEO, styling, components, conversion).
 
-**Stack:** Astro v6 | Tailwind CSS v4 | TypeScript 5.9 | MDX | Sharp · Docker (nginx:8080) · Google Cloud Run · Terraform · GitHub Actions (keyless WIF)
+**Stack:** Astro v6 | Tailwind CSS v4 | TypeScript 6.0 | MDX | Sharp · Docker (nginx:8080) · Google Cloud Run · Terraform · GitHub Actions (keyless WIF)
 
 **Public-repo rule:** nothing sensitive ever enters files, history, or CI logs. Identity is keyless (Workload Identity Federation, scoped to this repo); only `.example` placeholders are committed. App runtime secrets → Google Secret Manager.
 
@@ -112,9 +112,17 @@ Hero images use `loading="eager"` and `fetchpriority="high"` (LCP). Non-hero ima
 - `.github/workflows/ci.yml` runs on PRs: `npm run check`, Docker build, `terraform validate` (all envs), and a **Lighthouse CI** Core Web Vitals budget.
 - `deploy-dev/staging/prod.yml` are **app-deploy-only** (build image → push to Artifact Registry → deploy Cloud Run revision → smoke test). Terraform is run deliberately, not from CI.
 
+### Security automation
+
+Layered, defense-in-depth scanning — full runbook in `SECURITY.md`:
+
+- **Secret scanning** — `.github/workflows/secret-scan.yml` (Gitleaks SARIF + TruffleHog `--only-verified`), a Gitleaks pre-commit hook (`.githooks/pre-commit` / `.pre-commit-config.yaml`), and GitHub push protection.
+- **Code scanning (SAST)** — CodeQL on every PR; findings surface under **Security → Code scanning**. Keep it clean: workflows declare least-privilege `permissions:` (e.g. `ci.yml` is `contents: read`), and avoid the patterns CodeQL flags (e.g. complete, case-insensitive URL-scheme checks in `src/utils/permalinks.ts`).
+- **Dependencies** — Dependabot **version updates** (`.github/dependabot.yml`, weekly grouped: npm / github-actions / docker) plus security updates. See `SECURITY.md` → "Dependency security & vulnerability triage" for how transitive, dev/build-only advisories are assessed (execution-path exposure) and remediated or dismissed.
+
 ## Documentation
 
-All guides live in `docs/` and are indexed in `README.md` (deploy/infra + the 5-phase web-optimization docs).
+All guides live in `docs/` and are indexed in `README.md` (deploy/infra + the 5-phase web-optimization docs). Security tooling and the dependency/vulnerability response runbook are in `SECURITY.md`.
 
 ## Verification Checklist
 

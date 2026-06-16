@@ -68,6 +68,10 @@ Security**). Current state:
   on enablement). Findings appear under **Security → Code scanning**, alongside
   the Gitleaks SARIF from Layer 2.
 - ✅ **Copilot Autofix** — AI-suggested fixes for CodeQL alerts.
+- ✅ **Least-privilege workflows** — CI workflows declare an explicit
+  `permissions:` block (e.g. `ci.yml` is `contents: read`) so `GITHUB_TOKEN`
+  isn't granted broad default scopes. This clears CodeQL's "Workflow does not
+  contain permissions" alerts and is the standard for any new workflow.
 - Check-runs failure threshold: Security = **High or higher**, Standard = **Only
   errors**. To _block merges_ on these alerts, create a branch ruleset
   (**Settings → Rules**) that requires the code-scanning check.
@@ -86,6 +90,36 @@ Security**). Current state:
   (**Security → Advisories**); see "Reporting a vulnerability" below.
 
 > To review or change any of these: **Settings → Advanced Security**.
+
+## Dependency security & vulnerability triage
+
+Dependabot opens **version-update** PRs (weekly, grouped) and **security-update**
+PRs. Routine flow: let CI (`npm run check` + Docker build + Lighthouse + CodeQL)
+gate each PR, then merge group/patch/minor bumps when green; review majors
+(e.g. TypeScript 6.0) deliberately before merging.
+
+Not every alert has a clean fix — especially **transitive, dev/build-only**
+packages pinned by a parent (e.g. `esbuild` via `vite`). Triage by **execution
+path**, not severity label alone:
+
+1. **Is a non-breaking fix in range?** Prefer it. A locked transitive version can
+   lag the allowed range — `npm update <pkg>` bumps it without changing
+   `package.json` (this is how `vite` was moved 7.3.3 → **7.3.5** to fix
+   CVE-2026-53571, within the existing `^7` override). **Never** take a fix that
+   force-downgrades a core dep (e.g. `npm audit fix --force` proposing an ancient
+   `astro`).
+2. **Is the vulnerable code actually reachable here?** This ships as a **static
+   site** — Astro builds HTML in Linux CI, served by **nginx with no Node
+   runtime**. Advisories that only affect a dev server, a non-npm runtime
+   (Deno), or an OS we don't build on are **not in the execution path**. If so,
+   and no in-range fix exists, **dismiss the alert** in **Security → Dependabot
+   alerts** with reason **"Vulnerable code is not actually used"** and a one-line
+   justification. Re-evaluate if the dependency later enters a runtime path.
+3. **Stale alerts** (the flagged package is no longer in `package-lock.json`)
+   auto-close on the next dependency-graph scan; dismiss if they linger.
+
+Record non-obvious decisions in the PR or the dismissal note so the rationale is
+auditable.
 
 ## Allowlist rationale (why the gate isn't noisy)
 
