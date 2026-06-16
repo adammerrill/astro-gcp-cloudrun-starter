@@ -1,2 +1,36 @@
+# robots.txt — controls which automated crawlers may access the site.
+# (The sitemap reference is appended automatically at build time by the
+# template's config integration, so it is intentionally not listed here.)
+
+# --- Standard search crawlers: allow everything ---
 User-agent: *
 Disallow:
+
+# --- AI / LLM crawlers: explicitly welcomed ---
+# These bots let modern AI search engines (ChatGPT, Claude, Perplexity,
+# Google AI Overviews, Apple Intelligence) find, read, and CITE this site.
+# Allowing them is how the site shows up in AI-generated answers.
+# To OPT OUT of any one, change its "Allow: /" to "Disallow: /".
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
