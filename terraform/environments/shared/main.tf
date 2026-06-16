@@ -12,19 +12,6 @@ module "project" {
   deletion_policy    = var.deletion_policy
 }
 
-module "storage" {
-  source     = "../../modules/storage"
-  project_id = module.project.project_id
-
-  project_prefix      = var.project_prefix
-  environment         = "shared"
-  primary_region      = var.region
-  dr_region           = var.dr_region
-  create_audit_bucket = false
-
-  depends_on = [module.project]
-}
-
 module "artifact_registry" {
   source     = "../../modules/artifact_registry"
   project_id = module.project.project_id

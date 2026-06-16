@@ -55,10 +55,14 @@ resource "google_project" "prod" {
 
 locals {
   seed_apis = [
+    "cloudbilling.googleapis.com",
     "cloudresourcemanager.googleapis.com",
-    "serviceusage.googleapis.com",
     "iam.googleapis.com",
     "iamcredentials.googleapis.com",
+    "artifactregistry.googleapis.com",
+    "run.googleapis.com",
+    "secretmanager.googleapis.com",
+    "serviceusage.googleapis.com",
     "storage.googleapis.com",
   ]
   projects = {
@@ -136,6 +140,8 @@ locals {
   admin_roles = [
     "roles/editor",
     "roles/resourcemanager.projectIamAdmin",
+    "roles/iam.workloadIdentityPoolAdmin",
+    "roles/iam.serviceAccountAdmin",
   ]
   project_roles = flatten([
     for p_key, p_id in local.projects : [
