@@ -16,6 +16,27 @@ jobs:
       - run: npm ci
       - run: npm run check
 
+  # Performance budget — enforces Core Web Vitals on every PR.
+  # Lab metrics are diagnostic; CrUX field data is the true scoreboard once live.
+  # See web.dev/articles/vitals for the "good" thresholds (LCP<=2.5s, CLS<=0.1);
+  # INP has no lab equivalent, so we gate on Total Blocking Time as the proxy.
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Lighthouse CI (Core Web Vitals budget)
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: ./lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
   docker-build:
     runs-on: ubuntu-latest
     steps:
