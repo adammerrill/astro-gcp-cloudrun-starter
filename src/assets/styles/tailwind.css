@@ -115,3 +115,19 @@
 .dd *:first-child {
   margin-top: 0;
 }
+
+/* Accessibility: honor the OS "reduce motion" preference (WCAG 2.2 SC 2.3.3,
+   Animation from Interactions). Near-instant durations preserve functional
+   state changes (menu toggle, theme) while removing motion — including the
+   fadeInUp scroll animation and View Transitions — for users who can be made
+   ill or distracted by it. Source: w3.org/WAI/WCAG22, web.dev/prefers-reduced-motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
