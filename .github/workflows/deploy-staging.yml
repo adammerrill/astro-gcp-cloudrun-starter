@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch: {} # manual redeploy (image tagged with the selected ref)
 
 jobs:
   deploy:
