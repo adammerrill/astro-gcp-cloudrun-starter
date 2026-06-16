@@ -32,3 +32,25 @@ pnpm-lock.yaml
 terraform/**/*.tfvars
 terraform/**/backend.tf
 !terraform/**/*.example
+
+# Secrets & credentials (defense-in-depth — see SECURITY.md)
+# Broader env coverage (keep any committed *.example placeholders).
+.env.*
+!.env.example
+!*.env.example
+# Service-account / OAuth JSON keys (NOT package.json/tsconfig.json — only key-shaped names).
+*-key.json
+*service-account*.json
+*serviceaccount*.json
+*-sa.json
+gha-creds-*.json
+client_secret*.json
+credentials.json
+# Generic secret containers and private keys.
+secrets.*
+*.pem
+*.key
+*.p12
+*.pfx
+!*.example
+!*.template
