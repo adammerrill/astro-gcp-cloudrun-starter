@@ -1,10 +1,12 @@
-# AstroWind Agent Instructions
+# Agent Instructions — astro-gcp-cloudrun-starter
 
 ## Project Overview
 
-AstroWind is a free, open-source website template built with **Astro v6** and **Tailwind CSS v4**. It generates a fully static site optimized for performance, SEO, and accessibility.
+**astro-gcp-cloudrun-starter** is a production-ready, open-source GitHub template that deploys an **Astro v6 + Tailwind CSS v4** static site to **Google Cloud Run** with a zero-secrets, keyless, Terraform-managed foundation. The front end is derived from the AstroWind theme; the project adds a complete GCP/IaC/CI layer and a 5-phase web-optimization pass (performance, GEO, styling, components, conversion).
 
-**Stack:** Astro v6 | Tailwind CSS v4 | TypeScript 5.9 | MDX | Sharp
+**Stack:** Astro v6 | Tailwind CSS v4 | TypeScript 5.9 | MDX | Sharp · Docker (nginx:8080) · Google Cloud Run · Terraform · GitHub Actions (keyless WIF)
+
+**Public-repo rule:** nothing sensitive ever enters files, history, or CI logs. Identity is keyless (Workload Identity Federation, scoped to this repo); only `.example` placeholders are committed. App runtime secrets → Google Secret Manager.
 
 ## Quick Reference
 
@@ -95,12 +97,30 @@ Post frontmatter: `title` (required), `publishDate`, `updateDate`, `draft`, `exc
 - Remote images via Unpic CDN
 - Allowed domains (for providers Unpic can't detect, processed by Sharp): `cdn.pixabay.com`
 
-Hero images use `loading="eager"` and `fetchpriority="high"`.
+Hero images use `loading="eager"` and `fetchpriority="high"` (LCP). Non-hero images lazy-load and carry explicit dimensions (CLS-safe).
+
+## SEO / GEO / Analytics layer
+
+- `src/utils/schema.ts` — config-driven **schema.org JSON-LD** builders (Organization, WebSite, SoftwareApplication, FAQPage, BlogPosting, BreadcrumbList). Never hardcode schema in components; add to this module.
+- `src/components/common/StructuredData.astro` — renders JSON-LD; `Layout.astro` injects Organization + WebSite sitewide, pages append via the `structuredData` prop.
+- `src/components/common/Analytics.astro` — GA4 with **Consent Mode v2** (storage denied by default), off unless `analytics.vendors.googleAnalytics.id` is set. Tracks no-PII conversion events.
+- `public/robots.txt` (explicit AI-crawler policy) and `public/llms.txt` (LLM index).
+
+## Infrastructure & CI/CD
+
+- `terraform/` — `bootstrap` (projects, state bucket, admin SA), `environments/` (shared/dev/staging/production), and reusable `modules/`. State in GCS; identity keyless (WIF). See `docs/SETUP_PLAYBOOK.md` and `docs/FRESH_USER_WALKTHROUGH.md`.
+- `.github/workflows/ci.yml` runs on PRs: `npm run check`, Docker build, `terraform validate` (all envs), and a **Lighthouse CI** Core Web Vitals budget.
+- `deploy-dev/staging/prod.yml` are **app-deploy-only** (build image → push to Artifact Registry → deploy Cloud Run revision → smoke test). Terraform is run deliberately, not from CI.
+
+## Documentation
+
+All guides live in `docs/` and are indexed in `README.md` (deploy/infra + the 5-phase web-optimization docs).
 
 ## Verification Checklist
 
 After changes, always verify:
 
 1. `npm run build` succeeds
-2. `npm run check` passes (astro check + ESLint + Prettier)
-3. Visual check in browser: homepage, blog, dark mode, mobile menu
+2. `npm run check` passes (astro check + ESLint + Prettier) — this is the CI gate
+3. Don't regress the optimization invariants: valid JSON-LD, WCAG 2.2 AA contrast (both themes), skip link, minimal hydration, and the Lighthouse CWV budget (LCP ≤ 2.5s, CLS ≤ 0.1)
+4. Visual check in browser: homepage, blog, dark mode, mobile menu, keyboard focus

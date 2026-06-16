@@ -85,6 +85,19 @@ cp backend.tf.example backend.tf
 # Edit backend.tf: set bucket = "PREFIX-tf-state"
 ```
 
+For reference, `backend.tf` contains the GCS backend block (the same one
+`backend.tf.example` provides) pointing Terraform at your state bucket:
+
+```hcl
+# terraform/bootstrap/backend.tf
+terraform {
+  backend "gcs" {
+    bucket = "PREFIX-tf-state" # replace PREFIX with your project_prefix
+    prefix = "bootstrap"
+  }
+}
+```
+
 Run `terraform init` to migrate your local state into GCS:
 
 ```bash
