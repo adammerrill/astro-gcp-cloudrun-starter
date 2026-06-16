@@ -1,7 +1,7 @@
 variable "create_project" {
   type        = bool
-  description = "Whether to create the GCP project"
-  default     = true
+  description = "Whether Terraform should create the GCP project. The bootstrap module already creates all projects, so environment layers default to false and adopt the existing project."
+  default     = false
 }
 
 variable "project_name" {
@@ -83,8 +83,8 @@ variable "secrets" {
 
 variable "service_name" {
   type        = string
-  description = "Cloud Run service name"
-  default     = "astrowind"
+  description = "Cloud Run service name. MUST match the SERVICE_NAME GitHub Actions variable so CI deploys revisions to the same service Terraform creates."
+  default     = "website"
 }
 
 variable "image" {

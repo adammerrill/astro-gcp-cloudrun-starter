@@ -22,6 +22,9 @@ module "iam" {
   enable_cloud_sql  = var.enable_cloud_sql
   enable_vertex_ai  = var.enable_vertex_ai
 
+  # CI deploy SA lives in the shared project; grant it deploy rights here.
+  deploy_service_account_email = "sa-github-deploy@${var.shared_project_id}.iam.gserviceaccount.com"
+
   depends_on = [module.project]
 }
 
