@@ -12,6 +12,7 @@ import { getStaticPathsBlogPost, blogPostRobots } from '~/utils/blog';
 import { findImage } from '~/utils/images';
 import type { MetaData } from '~/types';
 import RelatedPosts from '~/components/blog/RelatedPosts.astro';
+import { getArticleSchema, getBreadcrumbSchema, absoluteUrl } from '~/utils/schema';
 
 export const prerender = true;
 
@@ -43,9 +44,20 @@ const metadata = merge(
   },
   { ...(post?.metadata ? { ...post.metadata, canonical: post.metadata?.canonical || url } : {}) }
 ) as MetaData;
+
+// BlogPosting + BreadcrumbList make each post a clean, citable source for AI
+// engines and surface breadcrumbs in search results.
+const structuredData = [
+  getArticleSchema(post, String(url)),
+  getBreadcrumbSchema([
+    { name: 'Home', url: absoluteUrl('/') },
+    { name: 'Blog', url: absoluteUrl('/blog') },
+    { name: post.title, url: String(url) },
+  ]),
+];
 ---
 
-<Layout metadata={metadata}>
+<Layout metadata={metadata} structuredData={structuredData}>
   <SinglePost post={{ ...post, image: image }} url={url}>
     {post.Content && <post.Content />}
   </SinglePost>

@@ -12,13 +12,63 @@ import FAQs from '~/components/widgets/FAQs.astro';
 import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 
+import {
+  getSoftwareApplicationSchema,
+  getFAQSchema,
+  getBreadcrumbSchema,
+  absoluteUrl,
+  type FaqItem,
+} from '~/utils/schema';
+
 const metadata = {
   title: 'astro-gcp-cloudrun-starter — Deploy Astro to Google Cloud Run, keyless & cost-optimized',
   ignoreTitleTemplate: true,
 };
+
+// Single source of truth for the FAQ — rendered on-page AND emitted as
+// schema.org FAQPage so AI engines can extract each Q&A as a citable fact.
+const faqItems: FaqItem[] = [
+  {
+    title: 'How much does the demo cost to run?',
+    description:
+      'Effectively ~$0/month. With min-instances = 0 the service scales to zero and is not billed while idle, and a low-traffic static demo stays within Cloud Run’s perpetual free tier. A billing budget alert is created automatically as a backstop. (An estimate, not a guarantee — model your traffic with the GCP pricing calculator.)',
+  },
+  {
+    title: 'Is it safe that the repo is public?',
+    description:
+      'Yes — that’s the core design. Identity is keyless via Workload Identity Federation, so there is no service-account key to leak. No secrets live in files, history, or CI logs; only placeholder .example files are committed.',
+  },
+  {
+    title: 'What does “keyless” actually mean?',
+    description:
+      'GitHub Actions presents an OIDC token that GCP exchanges for a short-lived credential at deploy time. The WIF provider only trusts tokens from this exact repository, so no other repo — even under the same owner — can assume the deploy identity.',
+  },
+  {
+    title: 'What do I need to deploy it myself?',
+    description:
+      'A GCP billing account, the gcloud CLI, Terraform, and Docker. Follow the Setup Playbook and the Fresh User Walkthrough: bootstrap → shared → dev → set GitHub Variables → push to main. About 30–45 minutes of active work.',
+  },
+  {
+    title: 'Can I use my own framework instead of Astro?',
+    description:
+      'Yes. The root Dockerfile is the contract: build your app and serve it on port 8080. Swap the source and the build steps; the Terraform foundation and CI are framework-agnostic.',
+  },
+  {
+    title: 'How do I add a custom domain or a backend later?',
+    description:
+      'The template ships feature-gated modules for DNS, Load Balancer, Cloud Armor, VPC, and Cloud SQL — all disabled by default for cost. Enable them in your tfvars when you actually need them.',
+  },
+];
+
+// Multiple valid schema types raise citability (CMU GEO, KDD 2024).
+const structuredData = [
+  getSoftwareApplicationSchema(),
+  getFAQSchema(faqItems),
+  getBreadcrumbSchema([{ name: 'Home', url: absoluteUrl('/') }]),
+];
 ---
 
-<Layout metadata={metadata}>
+<Layout metadata={metadata} structuredData={structuredData}>
   <!-- Hero Widget ******************* -->
 
   <Hero
@@ -289,38 +339,7 @@ const metadata = {
     subtitle="The questions people ask before adopting a public GCP starter template."
     tagline="FAQs"
     classes={{ container: 'max-w-6xl' }}
-    items={[
-      {
-        title: 'How much does the demo cost to run?',
-        description:
-          'Effectively ~$0/month. With min-instances = 0 the service scales to zero and is not billed while idle, and a low-traffic static demo stays within Cloud Run’s perpetual free tier. A billing budget alert is created automatically as a backstop. (An estimate, not a guarantee — model your traffic with the GCP pricing calculator.)',
-      },
-      {
-        title: 'Is it safe that the repo is public?',
-        description:
-          'Yes — that’s the core design. Identity is keyless via Workload Identity Federation, so there is no service-account key to leak. No secrets live in files, history, or CI logs; only placeholder .example files are committed.',
-      },
-      {
-        title: 'What does “keyless” actually mean?',
-        description:
-          'GitHub Actions presents an OIDC token that GCP exchanges for a short-lived credential at deploy time. The WIF provider only trusts tokens from this exact repository, so no other repo — even under the same owner — can assume the deploy identity.',
-      },
-      {
-        title: 'What do I need to deploy it myself?',
-        description:
-          'A GCP billing account, the gcloud CLI, Terraform, and Docker. Follow the Setup Playbook and the Fresh User Walkthrough: bootstrap → shared → dev → set GitHub Variables → push to main. About 30–45 minutes of active work.',
-      },
-      {
-        title: 'Can I use my own framework instead of Astro?',
-        description:
-          'Yes. The root Dockerfile is the contract: build your app and serve it on port 8080. Swap the source and the build steps; the Terraform foundation and CI are framework-agnostic.',
-      },
-      {
-        title: 'How do I add a custom domain or a backend later?',
-        description:
-          'The template ships feature-gated modules for DNS, Load Balancer, Cloud Armor, VPC, and Cloud SQL — all disabled by default for cost. Enable them in your tfvars when you actually need them.',
-      },
-    ]}
+    items={faqItems}
   />
 
   <!-- Stats Widget ****************** -->

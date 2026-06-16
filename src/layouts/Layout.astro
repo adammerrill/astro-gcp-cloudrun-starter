@@ -11,6 +11,9 @@ import Metadata from '~/components/common/Metadata.astro';
 import SiteVerification from '~/components/common/SiteVerification.astro';
 import Analytics from '~/components/common/Analytics.astro';
 import BasicScripts from '~/components/common/BasicScripts.astro';
+import StructuredData from '~/components/common/StructuredData.astro';
+
+import { getOrganizationSchema, getWebSiteSchema } from '~/utils/schema';
 
 // Comment the line below to disable View Transitions
 import { ClientRouter } from 'astro:transitions';
@@ -19,10 +22,15 @@ import type { MetaData as MetaDataType } from '~/types';
 
 export interface Props {
   metadata?: MetaDataType;
+  structuredData?: Record<string, unknown>[];
 }
 
-const { metadata = {} } = Astro.props;
+const { metadata = {}, structuredData = [] } = Astro.props;
 const { language, textDirection } = I18N;
+
+// Organization + WebSite ship on every page; pages append their own (FAQPage,
+// SoftwareApplication, BlogPosting, BreadcrumbList) via the structuredData prop.
+const schemas = [getOrganizationSchema(), getWebSiteSchema(), ...structuredData];
 ---
 
 <!doctype html>
@@ -33,6 +41,7 @@ const { language, textDirection } = I18N;
     <CustomStyles />
     <ApplyColorMode />
     <Metadata {...metadata} />
+    <StructuredData items={schemas} />
     <SiteVerification />
     <Analytics />
 
