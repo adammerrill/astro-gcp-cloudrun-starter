@@ -55,10 +55,14 @@ resource "google_project" "prod" {
 
 locals {
   seed_apis = [
+    "cloudbilling.googleapis.com",
     "cloudresourcemanager.googleapis.com",
-    "serviceusage.googleapis.com",
     "iam.googleapis.com",
     "iamcredentials.googleapis.com",
+    "artifactregistry.googleapis.com",
+    "run.googleapis.com",
+    "secretmanager.googleapis.com",
+    "serviceusage.googleapis.com",
     "storage.googleapis.com",
   ]
   projects = {
