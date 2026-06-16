@@ -5,20 +5,20 @@
 # ============================================================
 
 # === Stage 1: Install dependencies ===
-FROM node:22-alpine AS deps
+FROM node:26-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts && npm rebuild sharp
 
 # === Stage 2: Build static site ===
-FROM node:22-alpine AS build
+FROM node:26-alpine AS build
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
 
 # === Stage 3: Production runtime ===
-FROM nginx:1.27-alpine AS production
+FROM nginx:1.31-alpine AS production
 
 # Remove default config
 RUN rm -rf /etc/nginx/conf.d/default.conf
