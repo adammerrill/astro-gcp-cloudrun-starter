@@ -1,12 +1,17 @@
 # SETUP PLAYBOOK: Standing Up the GCP Environment
 
+> **Looking for the complete, ordered path from zero to a live URL** (including
+> GitHub Actions variables and the deploy step)? See
+> [FRESH_USER_WALKTHROUGH.md](./FRESH_USER_WALKTHROUGH.md). This playbook covers
+> the bootstrap and Terraform detail that the walkthrough references.
+
 This playbook guides a developer to stand up the web application on Google Cloud Platform (GCP) with infrastructure managed as code using Terraform.
 
 Our governing principle is **Terraform Maximalism**: Terraform does the maximum. The GCP Console and gcloud CLI are used **only** for the irreducible seed bootstrap steps that genuinely cannot be done by Terraform (since they must exist before Terraform can run). All subsequent configuration (APIs, IAM, Cloud Run, Cloud SQL, Secret Manager, WIF, etc.) is fully managed by Terraform, reviewed via PR, and applied in CI/CD.
 
 ---
 
-## Part 1: Irreducible Seed Manual Setup (M-1 to M-5)
+## Part 1: Irreducible Seed Manual Setup
 
 These steps are done exactly **once** by a human operator with sufficient organization-level or billing-level permissions.
 
@@ -62,21 +67,25 @@ terraform init
 terraform apply
 ```
 
-_This step creates the four projects (`mortru-shared`, `mortru-dev`, `mortru-staging`, `mortru-prod`), enables seed APIs, creates the GCS state bucket (`mortru-tf-state`), creates the automation service account (`sa-terraform-admin`), and grants you permission to impersonate it._
+_This step creates the four projects (`PREFIX-shared`, `PREFIX-dev`, `PREFIX-staging`, `PREFIX-prod`), enables seed APIs, creates the GCS state bucket (`PREFIX-tf-state`), creates the automation service account (`sa-terraform-admin`), and grants you permission to impersonate it._
+
+> **New-account project quota:** the bootstrap creates 4 projects. New billing
+> accounts often cap how many projects can be created. If you see
+> `Cloud billing quota exceeded`, request a quota increase, or trim the
+> `google_project` resources in `terraform/bootstrap/` to only what you need
+> (a demo needs just `shared` + `dev`).
 
 ### Step 3: Configure GCS Backend & Migrate State
 
-Once the GCS state bucket has been created, add the GCS backend configuration block to `terraform/bootstrap/main.tf` to point to GCS:
+Once the GCS state bucket exists, copy the backend example into place (it is
+git-ignored; only the `.example` is committed) and set your bucket name:
 
-```hcl
-# Add this block inside the terraform {} configuration block in terraform/bootstrap/main.tf
-  backend "gcs" {
-    bucket = "mortru-tf-state" # Replace with your project_prefix-tf-state
-    prefix = "bootstrap"
-  }
+```bash
+cp backend.tf.example backend.tf
+# Edit backend.tf: set bucket = "PREFIX-tf-state"
 ```
 
-Run `terraform init` to migrate your local state:
+Run `terraform init` to migrate your local state into GCS:
 
 ```bash
 terraform init -migrate-state
@@ -87,9 +96,22 @@ Verify that the local state file `terraform.tfstate` is now empty or can be safe
 
 ---
 
-## Part 3: Deploying Environments (Dev / Staging / Production)
+## Part 3: Deploying Environments (Shared → Dev / Staging / Production)
 
 All downstream environments use **Service Account Impersonation**. They authenticate through local ADC but execute all API actions as the privileged `sa-terraform-admin` service account.
+
+**Apply order matters:** apply the **`shared`** layer first (it creates the WIF
+provider, the GitHub deploy SA, and the Artifact Registry that everything else
+depends on), then `dev` (or staging/production). Each layer needs both a
+`terraform.tfvars` and a `backend.tf` (copy each from its `.example`; set the
+bucket to `PREFIX-tf-state` and a unique `prefix` per layer). After `shared`
+applies, run `terraform output` and use the values for the GitHub Actions
+variables — see
+[FRESH_USER_WALKTHROUGH.md §5–6](./FRESH_USER_WALKTHROUGH.md#5-configure-github-actions-variables).
+
+> **`create_project` is `false` by default** in every environment layer: the
+> bootstrap module already created the projects, so Terraform adopts them. If
+> you set it true, the apply fails with a billing precondition error.
 
 ### Step 1: Verify Environment Configurations
 
@@ -97,7 +119,9 @@ Before applying, ensure `terraform.tfvars` in the target environment (e.g., `ter
 
 ```hcl
 billing_account_id        = "012345-6789AB-CDEF01"
-terraform_service_account = "sa-terraform-admin@mortru-shared.iam.gserviceaccount.com"
+project_id                = "PREFIX-dev"
+create_project            = false
+terraform_service_account = "sa-terraform-admin@PREFIX-shared.iam.gserviceaccount.com"
 # ... other vars
 ```
 
