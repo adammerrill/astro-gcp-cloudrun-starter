@@ -140,6 +140,8 @@ locals {
   admin_roles = [
     "roles/editor",
     "roles/resourcemanager.projectIamAdmin",
+    "roles/iam.workloadIdentityPoolAdmin",
+    "roles/iam.serviceAccountAdmin",
   ]
   project_roles = flatten([
     for p_key, p_id in local.projects : [
